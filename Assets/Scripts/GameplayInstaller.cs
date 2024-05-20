@@ -1,0 +1,35 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Zenject;
+
+public class GameplayInstaller : MonoInstaller
+{
+    public override void InstallBindings()
+    {
+        
+        //TODEL======================
+        Globals.MainPlayerData = new PlayerData();        
+        Globals.IsInitiated = true;
+        Globals.IsMobile = true;
+        Globals.IsSoundOn = true;
+        Globals.IsMusicOn = true;
+        Globals.Language = Localization.GetInstanse("ru").GetCurrentTranslation();
+        Globals.CurrentLevel = Globals.MainPlayerData.Level;
+        
+
+        Debug.Log("gameplay");
+        Container.Bind<Joystick>().FromComponentInHierarchy(true).AsSingle();
+        Container.Bind<LevelManager>().FromComponentInHierarchy(true).AsSingle();
+        Container.Bind<GameManager>().FromComponentInHierarchy(true).AsSingle();        
+        Container.Bind<InputControl>().FromComponentInHierarchy(true).AsSingle();
+        Container.Bind<MainPlayerControl>().FromComponentInHierarchy(true).AsSingle();
+        Container.Bind<Camera>().FromComponentInHierarchy(true).AsSingle();        
+        Container.Bind<CameraControl>().FromComponentInHierarchy(true).AsSingle();
+               
+
+        Container.Bind<Musics>().FromComponentInHierarchy(true).AsSingle();
+        Container.Bind<Sounds>().FromComponentInHierarchy(true).AsSingle();
+        Container.Bind<ScreenSaver>().FromComponentInHierarchy(true).AsSingle();
+    }
+}
