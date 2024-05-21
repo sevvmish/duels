@@ -40,11 +40,11 @@ public class ScreenSaver : MonoBehaviour
     {        
         screen1.gameObject.SetActive(true);
         screen1.anchoredPosition = new Vector2(0, 1000);
-        screen1.DOAnchorPos3D(new Vector2(0, 2000), Globals.SCREEN_SAVER_AWAIT).SetEase(Ease.Linear);
+        screen1.DOAnchorPos3D(new Vector2(0, 2000), Globals.SCREEN_SAVER_AWAIT/1.5f).SetEase(Ease.InSine);
 
         screen2.gameObject.SetActive(true);
         screen2.anchoredPosition = new Vector2(0, -1000);
-        screen2.DOAnchorPos3D(new Vector2(0, -2000), Globals.SCREEN_SAVER_AWAIT).SetEase(Ease.Linear);
+        screen2.DOAnchorPos3D(new Vector2(0, -2000), Globals.SCREEN_SAVER_AWAIT/1.5f).SetEase(Ease.InSine);
 
         StartCoroutine(deactivateAfter(Globals.SCREEN_SAVER_AWAIT));
     }

@@ -6,20 +6,21 @@ public class Character
 {
     public string Name { get; private set; }
     public CharacterTypesByUniqueName CharacterTypes { get; private set; }
+    public CharacterQualities CharacterQuality { get; private set; }
     public int Level { get; private set; }
-    public float HP { get; private set; }
-    public float Damage { get; private set; }
+
+    public float CurrentHP { get; private set; }
+    public float BaseHP { get; private set; }
+    public float DeltaHP { get; private set; }
+    
+    public float CurrentDamage { get; private set; }
+    public float BaseDamage { get; private set; }
+    public float DeltaDamage { get; private set; }
+
+    public float DamageRadius { get; private set; }
 
     public Character() { }
-
-    public Character(string name, int level, float hp, float damage, CharacterTypesByUniqueName characterTypes)
-    {
-        Name = name;
-        Level = level;
-        HP = hp;
-        Damage = damage;
-        CharacterTypes = characterTypes;
-    }
+        
 
     public Character(CharacterTypesByUniqueName characterType, int level) 
     {
@@ -33,13 +34,26 @@ public class Character
             case CharacterTypesByUniqueName.ShooterMike:
                 c = ShooterMike(level);
                 break;
+
+            case CharacterTypesByUniqueName.TestBoss:
+                c = TestBoss(level);
+                break;
         }
               
         CharacterTypes = c.CharacterTypes;
         Name = c.Name;
         Level = level;
-        Damage = c.Damage;
-        HP = c.HP;
+        
+        CurrentHP = c.CurrentHP;
+        BaseHP = c.BaseHP;
+        DeltaHP = c.DeltaHP;
+
+        CurrentDamage = c.CurrentDamage;
+        BaseDamage = c.BaseDamage;
+        DeltaDamage = c.DeltaDamage;
+        DamageRadius = c.DamageRadius;
+
+        CharacterQuality = c.CharacterQuality;
 
     }
 
@@ -48,12 +62,16 @@ public class Character
         Character c = new Character();
         c.CharacterTypes = CharacterTypesByUniqueName.WarriorSam;
 
-        float deltaHP = 5f;
-        float deltadamage = 2f;
+        c.BaseHP = 100;
+        c.DeltaHP = 5;
+        c.BaseDamage = 10;
+        c.DeltaDamage = 2;
 
         c.Name = "WarriorSam";
-        c.HP = 100 + deltaHP * level;
-        c.Damage = 10 + deltadamage * level;
+        c.CurrentHP = c.BaseHP + c.DeltaHP * level;
+        c.CurrentDamage = c.BaseDamage + c.DeltaDamage * level;
+        c.DamageRadius = 0.5f;
+        c.CharacterQuality = CharacterQualities.common;
         return c;
     }
 
@@ -62,12 +80,34 @@ public class Character
         Character c = new Character();
         c.CharacterTypes = CharacterTypesByUniqueName.ShooterMike;
 
-        float deltaHP = 3f;
-        float deltadamage = 3f;
+        c.BaseHP = 80;
+        c.DeltaHP = 3;
+        c.BaseDamage = 15;
+        c.DeltaDamage = 3;
 
         c.Name = "ShooterMike";
-        c.HP = 80 + deltaHP * level;
-        c.Damage = 15 + deltadamage * level;
+        c.CurrentHP = c.BaseHP + c.DeltaHP * level;
+        c.CurrentDamage = c.BaseDamage + c.DeltaDamage * level;
+        c.DamageRadius = 0.5f;
+        c.CharacterQuality = CharacterQualities.common;
+        return c;
+    }
+
+    private Character TestBoss(int level)
+    {
+        Character c = new Character();
+        c.CharacterTypes = CharacterTypesByUniqueName.TestBoss;
+
+        c.BaseHP = 700;
+        c.DeltaHP = 10;
+        c.BaseDamage = 10;
+        c.DeltaDamage = 3;
+
+        c.Name = "TestBoss";
+        c.CurrentHP = c.BaseHP + c.DeltaHP * level;
+        c.CurrentDamage = c.BaseDamage + c.DeltaDamage * level;
+        c.DamageRadius = 1f;
+        c.CharacterQuality = CharacterQualities.improved;
         return c;
     }
 
@@ -94,6 +134,7 @@ public class Character
         {
             case CharacterTypesByUniqueName.WarriorSam: return Resources.Load<GameObject>("Characters/WarriorSam");
             case CharacterTypesByUniqueName.ShooterMike: return Resources.Load<GameObject>("Characters/ShooterMike");
+            case CharacterTypesByUniqueName.TestBoss: return Resources.Load<GameObject>("Characters/TestBoss");
         }
 
         return null;
@@ -103,7 +144,17 @@ public class Character
 public enum CharacterTypesByUniqueName
 {
     WarriorSam,
-    ShooterMike
+    ShooterMike,
+    TestBoss
+}
+
+public enum CharacterTypesByCathegory
+{
+    Squad,
+    NPS_small,
+    NPS_medium,
+    NPS_large,
+    NPS_boss
 }
 
 public enum CharacterQualities

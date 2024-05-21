@@ -5,28 +5,42 @@ using UnityEngine.AI;
 
 public class PlayerDomain : MonoBehaviour
 {
+    public int TeamID { get; private set; } = 1;
+    public float BorderRadius { get; private set; } = 9;
+
     private NavMeshAgent agent;
     private List<CharacterManager> charsSquad = new List<CharacterManager>();
-    
-     
+    private CapsuleCollider _collider;
+    private PlayerBorderVisual border;
 
     private void OnEnable()
     {
         if (agent == null) agent = GetComponent<NavMeshAgent>();
+        if (_collider == null) _collider = GetComponent<CapsuleCollider>();
+        _collider.radius = BorderRadius / 2f;
 
-        //
 
-        Character c = new Character(CharacterTypesByUniqueName.WarriorSam, 1);
-        addCharacter(c);
-        Character b = new Character(CharacterTypesByUniqueName.ShooterMike, 1);
-        addCharacter(b);
+        addCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));        
+        addCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
+
+        if (TryGetComponent(out CharacterAimer c))
+        {
+            c.SetData(charsSquad, BorderRadius/2);
+        }
+    }
+
+    public void AddBorderVisual()
+    {
+        if (border != null) return;
+        border = Instantiate(Resources.Load<GameObject>("BorderVisual"), transform).GetComponent<PlayerBorderVisual>();
+        border.SetSize(BorderRadius);
     }
 
     private void addCharacter(Character c)
     {
         GameObject g = Instantiate(Resources.Load<GameObject>("CharacterManager"), transform);
         CharacterManager m = g.GetComponent<CharacterManager>();
-        m.SetCharacter(c);
+        m.SetCharacter(c, TeamID);
         charsSquad.Add(m);
     }
 

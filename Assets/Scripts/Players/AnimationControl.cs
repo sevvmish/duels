@@ -9,11 +9,11 @@ public class AnimationControl : MonoBehaviour
 
     private Animator _animator;
     private float speedLimitWalkRun = 1f;
-    private float minSpeed = 0.1f;
+    private float minSpeed = 0.05f;
     private float _timer;
     private readonly float coolDown = 0.1f;
 
-    private CharacterManager cm;
+    private CharacterManager cm;    
 
     private void OnEnable()
     {

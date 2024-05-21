@@ -8,15 +8,15 @@ public class PlayerBorderVisual : MonoBehaviour
     [SerializeField] private ParticleSystem borderLight;
 
     private readonly float baseSize = 5f;
-    private float currentSize = 9f;
+    private float currentSize = 5f;
 
     // Start is called before the first frame update
     void Start()
     {
-        setSize(currentSize);
+        SetSize(currentSize);
     }
 
-    private void setSize(float size)
+    public void SetSize(float size)
     {
         currentSize = size;
         borderLine.gameObject.transform.localScale = Vector3.one / baseSize * size;

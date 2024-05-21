@@ -8,7 +8,7 @@ public class MainPlayerControl : MonoBehaviour
 {
     [Inject] private InputControl inputControl;
 
-    private PlayerBorderVisual border;
+    
     private PlayerDomain domain;
     private Transform domainTransform;
     private float _timer;
@@ -18,8 +18,8 @@ public class MainPlayerControl : MonoBehaviour
     {
         domain = GetComponent<PlayerDomain>();
         domainTransform = domain.transform;
-
-        border = Instantiate(Resources.Load<GameObject>("BorderVisual"), transform).GetComponent<PlayerBorderVisual>();
+        domain.AddBorderVisual();
+        
     }
 
     // Update is called once per frame

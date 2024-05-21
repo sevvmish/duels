@@ -27,7 +27,7 @@ public class Globals : MonoBehaviour
     public static bool IsOptions;
     public static bool IsLowFPS;
 
-    public const float SCREEN_SAVER_AWAIT = 1f;
+    public const float SCREEN_SAVER_AWAIT = 0.75f;
 
     public const float PLAYER_UPDATE_COOLDOWN = 0.15f;
 
