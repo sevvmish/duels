@@ -8,13 +8,13 @@ public class MainPlayerControl : MonoBehaviour
 {
     [Inject] private InputControl inputControl;
 
-    private NavMeshAgent agent;
+    private PlayerDomain domain;
     private float _timer;
 
     // Start is called before the first frame update
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        domain = GetComponent<PlayerDomain>();
     }
 
     // Update is called once per frame
@@ -24,7 +24,7 @@ public class MainPlayerControl : MonoBehaviour
         {
             _timer = 0;
             Vector3 destination = transform.position + new Vector3(inputControl.Direction.x, 0, inputControl.Direction.y) * 2;
-            agent.SetDestination(destination);
+            domain.WalkToPoint(destination);
         }
         else
         {
