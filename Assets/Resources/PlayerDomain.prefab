@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8664223362862218502
+--- !u!1 &3777971368599507569
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3264187084062075180}
-  - component: {fileID: 6724003287511814460}
-  - component: {fileID: 1473152141739705082}
+  - component: {fileID: 5586044016221635522}
+  - component: {fileID: 205993938128369557}
+  - component: {fileID: 6163733128548793279}
   m_Layer: 0
-  m_Name: CharacterManager
+  m_Name: PlayerDomain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3264187084062075180
+--- !u!4 &5586044016221635522
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8664223362862218502}
+  m_GameObject: {fileID: 3777971368599507569}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -33,20 +33,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!195 &6724003287511814460
+--- !u!114 &205993938128369557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3777971368599507569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f072bf53d0a062469c503710fc8333c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!195 &6163733128548793279
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8664223362862218502}
+  m_GameObject: {fileID: 3777971368599507569}
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.01
   m_Speed: 5
   m_Acceleration: 10000
   avoidancePriority: 50
-  m_AngularSpeed: 10000
+  m_AngularSpeed: 0
   m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -55,15 +67,3 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
---- !u!114 &1473152141739705082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8664223362862218502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bfaeb13a58c12042a153fa41008ea44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

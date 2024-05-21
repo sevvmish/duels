@@ -8,13 +8,18 @@ public class MainPlayerControl : MonoBehaviour
 {
     [Inject] private InputControl inputControl;
 
+    private PlayerBorderVisual border;
     private PlayerDomain domain;
+    private Transform domainTransform;
     private float _timer;
 
     // Start is called before the first frame update
     void Start()
     {
         domain = GetComponent<PlayerDomain>();
+        domainTransform = domain.transform;
+
+        border = Instantiate(Resources.Load<GameObject>("BorderVisual"), transform).GetComponent<PlayerBorderVisual>();
     }
 
     // Update is called once per frame
@@ -24,7 +29,7 @@ public class MainPlayerControl : MonoBehaviour
         {
             _timer = 0;
             Vector3 destination = transform.position + new Vector3(inputControl.Direction.x, 0, inputControl.Direction.y) * 2;
-            domain.WalkToPoint(destination);
+            domain.WalkToPoint(destination);            
         }
         else
         {
