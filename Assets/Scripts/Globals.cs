@@ -29,7 +29,7 @@ public class Globals : MonoBehaviour
 
     public const float SCREEN_SAVER_AWAIT = 0.75f;
 
-    public const float PLAYER_UPDATE_COOLDOWN = 0.15f;
+    public const float PLAYER_UPDATE_COOLDOWN = 0.1f;
 
 
     public static bool IsMobileChecker()

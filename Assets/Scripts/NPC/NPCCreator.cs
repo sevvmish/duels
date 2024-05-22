@@ -4,32 +4,24 @@ using UnityEngine;
 
 public class NPCCreator : MonoBehaviour
 {
-    public CharacterManager NPC { get; private set; }
-
+    //[Inject] CharacterManager.Factory factory;
+    //[Inject] private GameManager gm;
+    
     [SerializeField] private CharacterTypesByUniqueName currentNPS = CharacterTypesByUniqueName.TestBoss;
-    [SerializeField] private float aggroRadius = 5f;
+    [SerializeField] private float aggroRadius = 3f;
     [SerializeField] private int team = -1;
+
+    private AssetManager assets;
+    private PlayerDomain npcDomain;
 
     // Start is called before the first frame update
     void Start()
-    {
-        addCharacter(new Character(currentNPS, 1));
+    {   
+        assets = GameObject.Find("AssetManager").GetComponent<AssetManager>();
 
-        if (TryGetComponent(out CharacterAimer c))
-        {
-            
-            c.SetData(NPC, aggroRadius);
-        }
+        npcDomain = GetComponent<PlayerDomain>();
+        npcDomain.SetData(team, aggroRadius, PlayerTypes.npc);
+        npcDomain.AddCharacter(new Character(currentNPS, 1));
     }
-
-    private void addCharacter(Character c)
-    {
-        GameObject g = Instantiate(Resources.Load<GameObject>("CharacterManager"), transform);
-        CharacterManager m = g.GetComponent<CharacterManager>();
-        NPC = m;
-        m.SetCharacter(c, team);
-        m.SetReadyForAction(false);
-    }
-
 
 }

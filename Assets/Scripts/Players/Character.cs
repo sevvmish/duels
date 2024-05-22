@@ -18,6 +18,7 @@ public class Character
     public float DeltaDamage { get; private set; }
 
     public float DamageRadius { get; private set; }
+    public float HitRadius { get; private set; }
 
     public Character() { }
         
@@ -52,6 +53,7 @@ public class Character
         BaseDamage = c.BaseDamage;
         DeltaDamage = c.DeltaDamage;
         DamageRadius = c.DamageRadius;
+        HitRadius = c.HitRadius;
 
         CharacterQuality = c.CharacterQuality;
 
@@ -70,7 +72,8 @@ public class Character
         c.Name = "WarriorSam";
         c.CurrentHP = c.BaseHP + c.DeltaHP * level;
         c.CurrentDamage = c.BaseDamage + c.DeltaDamage * level;
-        c.DamageRadius = 0.5f;
+        c.DamageRadius = 0.25f;
+        c.HitRadius = 0.75f;
         c.CharacterQuality = CharacterQualities.common;
         return c;
     }
@@ -88,7 +91,8 @@ public class Character
         c.Name = "ShooterMike";
         c.CurrentHP = c.BaseHP + c.DeltaHP * level;
         c.CurrentDamage = c.BaseDamage + c.DeltaDamage * level;
-        c.DamageRadius = 0.5f;
+        c.DamageRadius = 0.25f;
+        c.HitRadius = 3f;
         c.CharacterQuality = CharacterQualities.common;
         return c;
     }
@@ -106,7 +110,7 @@ public class Character
         c.Name = "TestBoss";
         c.CurrentHP = c.BaseHP + c.DeltaHP * level;
         c.CurrentDamage = c.BaseDamage + c.DeltaDamage * level;
-        c.DamageRadius = 1f;
+        c.DamageRadius = 0.25f;
         c.CharacterQuality = CharacterQualities.improved;
         return c;
     }

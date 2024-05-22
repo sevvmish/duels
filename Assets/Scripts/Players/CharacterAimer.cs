@@ -4,68 +4,52 @@ using UnityEngine;
 
 public class CharacterAimer : MonoBehaviour
 {
-    private CharacterManager characterManager;
-    private List<CharacterManager> characters = new List<CharacterManager>();
-    private CapsuleCollider _collider;
-    private bool isOne;
-    private int team;
+    public List<CharacterManager> Aims { get; private set; }
+    private HashSet<CharacterManager> aimCheck = new HashSet<CharacterManager>();
 
-    private void OnEnable()
+    private CapsuleCollider _collider;
+    private int team;
+    private bool isInited;
+
+    public void SetData(float aggroRadius, int team)
     {
         if (_collider == null) _collider = GetComponent<CapsuleCollider>();
-    }
+        Aims = new List<CharacterManager> ();
 
-    public void SetData(CharacterManager c, float aggroRadius)
-    {
-        
-        characterManager = c;
-        _collider.radius = aggroRadius;
-        isOne = true;
-        team = c.TeamID;
-    }
-
-    public void SetData(List<CharacterManager> c, float radius)
-    {
-        characters = c;
-        _collider.radius = radius;
-        isOne = false;
-        team = c[0].TeamID;
+        _collider.radius = aggroRadius;        
+        this.team = team;
+        isInited = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((isOne || characters.Count > 0) && other.gameObject.TryGetComponent(out CharacterManager c) && c.TeamID != team)
+        if (isInited && other.gameObject.TryGetComponent(out CharacterManager c) && c.TeamID != team)
         {
-            if (isOne)
-            {
-                characterManager.AddAim(c);
-            }
-            else
-            {
-                for (int i = 0; i < characters.Count; i++)
-                {
-                    characters[i].AddAim(c);
-                }
-            }
-            
+            addAim(c);            
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if ((isOne || characters.Count > 0) && other.gameObject.TryGetComponent(out CharacterManager c) && c.TeamID != team)
+        if (isInited && other.gameObject.TryGetComponent(out CharacterManager c) && c.TeamID != team)
         {
-            if (isOne)
-            {
-                characterManager.RemoveAim(c);
-            }
-            else
-            {
-                for (int i = 0; i < characters.Count; i++)
-                {
-                    characters[i].RemoveAim(c);
-                }
-            }            
+            removeAim(c);
         }
+    }
+
+    public void addAim(CharacterManager newAim)
+    {
+        if (aimCheck.Contains(newAim)) return;
+
+        aimCheck.Add(newAim);
+        Aims.Add(newAim);
+    }
+
+    public void removeAim(CharacterManager newAim)
+    {
+        if (!aimCheck.Contains(newAim)) return;
+
+        aimCheck.Remove(newAim);
+        Aims.Remove(newAim);
     }
 }

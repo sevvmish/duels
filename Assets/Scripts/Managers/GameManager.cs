@@ -46,4 +46,9 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+    public void TestGM()
+    {
+        print("Testing GM!!!");
+    }
 }

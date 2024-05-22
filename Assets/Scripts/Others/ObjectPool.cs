@@ -88,7 +88,9 @@ public class ObjectPool : MonoBehaviour
 
     public void ReturnObject(GameObject _object)
     {
+        if (storage != null) _object.transform.parent = storage;
         _object.SetActive(false);
         poolOfObjects.Enqueue(_object);
     }
+
 }
