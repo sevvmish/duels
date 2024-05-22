@@ -8,6 +8,7 @@ public class Character
     public CharacterTypesByUniqueName CharacterTypes { get; private set; }
     public CharacterQualities CharacterQuality { get; private set; }
     public int Level { get; private set; }
+    public float CurrentSpeed { get; private set; }
 
     public float CurrentHP { get; private set; }
     public float BaseHP { get; private set; }
@@ -16,9 +17,14 @@ public class Character
     public float CurrentDamage { get; private set; }
     public float BaseDamage { get; private set; }
     public float DeltaDamage { get; private set; }
+    public float AttackSpeed { get; private set; }
 
     public float DamageRadius { get; private set; }
     public float HitRadius { get; private set; }
+    public AttackTypes AttackType { get; private set; }
+
+    public bool IsAlive { get => CurrentHP > 0; }
+    public CharacterSized Size { get; private set; }
 
     public Character() { }
         
@@ -54,6 +60,10 @@ public class Character
         DeltaDamage = c.DeltaDamage;
         DamageRadius = c.DamageRadius;
         HitRadius = c.HitRadius;
+        AttackType = c.AttackType;
+        AttackSpeed = c.AttackSpeed;
+        Size = c.Size;
+        CurrentSpeed = c.CurrentSpeed;
 
         CharacterQuality = c.CharacterQuality;
 
@@ -75,6 +85,10 @@ public class Character
         c.DamageRadius = 0.25f;
         c.HitRadius = 0.75f;
         c.CharacterQuality = CharacterQualities.common;
+        c.AttackType = AttackTypes.melee_hit;
+        c.AttackSpeed = 0.7f;
+        c.Size = CharacterSized.small;
+        c.CurrentSpeed = 3;
         return c;
     }
 
@@ -92,8 +106,12 @@ public class Character
         c.CurrentHP = c.BaseHP + c.DeltaHP * level;
         c.CurrentDamage = c.BaseDamage + c.DeltaDamage * level;
         c.DamageRadius = 0.25f;
-        c.HitRadius = 3f;
+        c.HitRadius = 4f;
         c.CharacterQuality = CharacterQualities.common;
+        c.AttackType = AttackTypes.ranged_hit;
+        c.AttackSpeed = 0.8f;
+        c.Size = CharacterSized.small;
+        c.CurrentSpeed = 3;
         return c;
     }
 
@@ -112,6 +130,10 @@ public class Character
         c.CurrentDamage = c.BaseDamage + c.DeltaDamage * level;
         c.DamageRadius = 0.25f;
         c.CharacterQuality = CharacterQualities.improved;
+        c.AttackType = AttackTypes.melee_hit;
+        c.AttackSpeed = 0.9f;
+        c.Size = CharacterSized.small;
+        c.CurrentSpeed = 3;
         return c;
     }
 
@@ -168,4 +190,17 @@ public enum CharacterQualities
     unique,
     rare,
     legendary
+}
+
+public enum AttackTypes
+{
+    melee_hit,
+    ranged_hit
+}
+
+public enum CharacterSized
+{
+    small,
+    medium,
+    big
 }

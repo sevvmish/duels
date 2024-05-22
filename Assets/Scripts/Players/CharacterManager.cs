@@ -5,32 +5,48 @@ using UnityEngine.AI;
 using Zenject;
 
 public class CharacterManager : MonoBehaviour
-{    
+{
+    public bool IsReadyForAction;
+    private float MaxAgentSpeed = 5;
+    public List<CharacterManager> PlayerAims;
+
     public Character Character { get; private set; }
     public float CurrentSpeed { get; private set; }
     public void SetSpeed(float speed) => agent.speed = speed;
     public int TeamID { get; private set; }
-    
-    private NavMeshAgent agent;
-    private AnimationControl _animator;
-    private CapsuleCollider _collider;
-    private PlayerDomain domain;
-        
+    public AnimationControl CharacterAnimator { get; private set; }
+    public PlayerTypes PlayerType { get; private set; }
 
-    public void SetCharacter(Character c, int team, float speed, GameObject characterObject, PlayerDomain domain)
+    private NavMeshAgent agent;    
+    private CapsuleCollider _collider;
+    private bool isAttacking;
+    private PerformAttack performAttack;
+    PlayerDomain d;
+
+
+    public void SetCharacter(Character c, int team, float speed, GameObject characterObject, List<CharacterManager> aims, PlayerTypes p, PlayerDomain d)
     {
+        PlayerType = p;
+        this.d = d;
+
+        PlayerAims = aims;
         agent = GetComponent<NavMeshAgent>();
+
         agent.speed = speed;
+        MaxAgentSpeed = speed;
         _collider = GetComponent<CapsuleCollider>();
-        this.domain = domain;
 
         Character = c;
         GameObject g = Instantiate(characterObject, transform);        
-        _animator = g.GetComponent<AnimationControl>();
-        _animator.SetData(this);
+        CharacterAnimator = g.GetComponent<AnimationControl>();
+        CharacterAnimator.SetData(this);
         TeamID = team;
         _collider.radius = c.DamageRadius / 2f;
         g.SetActive(true);
+
+        gameObject.AddComponent<PerformAttack>();
+        performAttack = GetComponent<PerformAttack>();
+        performAttack.SetData(Character, CharacterAnimator);
     }
 
 
@@ -43,63 +59,83 @@ public class CharacterManager : MonoBehaviour
        
 
     private void Update()
-    {
+    {       
         CurrentSpeed = agent.velocity.magnitude;
 
-        if (domain.IsReadyForAction && domain.PlayerAims.Count > 0)
+        if (IsReadyForAction)
+        {            
+            if (isAttacking)
+            {
+                agent.speed = MaxAgentSpeed * 1.5f;
+            }
+                
+
+            if (PlayerAims.Count > 0)
+            {
+                sendToAttack();
+            }
+            else
+            {
+                isAttacking = false;
+            }
+            
+        }
+        else
         {
-            sendToAttack();
+            isAttacking = false;            
+            if (agent.speed > MaxAgentSpeed)
+            {
+                agent.speed -= Time.deltaTime*3;
+            }
+            else
+            {
+                agent.speed = MaxAgentSpeed;
+            }
+                
         }
     }
 
     private void sendToAttack()
     {
-
+        isAttacking = true;
         
         float minDist = float.MaxValue;
-        CharacterManager characterManager = null;
+        CharacterManager aim = null;
 
-        for (int i = 0; i < domain.PlayerAims.Count; i++)
+        for (int i = 0; i < PlayerAims.Count; i++)
         {
-            float distance = (domain.PlayerAims[i].transform.position - transform.position).magnitude;
+            if (!PlayerAims[i].Character.IsAlive) continue;
+
+            float distance = (PlayerAims[i].transform.position - transform.position).magnitude;
             if (distance < minDist)
             {
                 minDist = distance;
-                characterManager = domain.PlayerAims[i];
+                aim = PlayerAims[i];
             }
         }
 
-        if (characterManager != null)
+        if (aim != null)
         {
-            float minusDist = Character.HitRadius + characterManager.Character.DamageRadius;
+            float minusDist = Character.HitRadius + aim.Character.DamageRadius;
             
             if (minDist <= minusDist)
-            {
-                //WalkToPoint(characterManager.transform.position);
+            {                
                 if (agent.hasPath && !agent.isStopped) agent.isStopped = true;
+                performAttack.Hit(aim);
             }
             else
-            {
-                //Vector3 dist = (characterManager.transform.position - transform.position).normalized;
-                WalkToPoint(characterManager.transform.position);
+            {                
+                if (PlayerType == PlayerTypes.npc)
+                {
+                    d.WalkToPoint(aim.transform.position);
+                }
+                else
+                {
+                    WalkToPoint(aim.transform.position);
+                }
+                    
             }
-            
-
-            
         }
     }
 
-
-
-    /*
-    private GameManager gm;
-
-    public class Factory : PlaceholderFactory<CharacterManager> { }
-
-    [Inject]
-    public void Construct(GameManager gm)
-    {
-        this.gm = gm;
-    }
-    */
 }

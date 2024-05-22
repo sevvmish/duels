@@ -13,7 +13,7 @@ public class MainPlayerControl : MonoBehaviour
     private float _timer = 0;
 
     private int team = 1;
-    private float radius = 4.5f;
+    private float radius = 5.3f;
 
     private Vector3 currentDestination, destination;
 

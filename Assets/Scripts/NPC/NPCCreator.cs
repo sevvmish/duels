@@ -22,6 +22,7 @@ public class NPCCreator : MonoBehaviour
         npcDomain = GetComponent<PlayerDomain>();
         npcDomain.SetData(team, aggroRadius, PlayerTypes.npc);
         npcDomain.AddCharacter(new Character(currentNPS, 1));
+        npcDomain.SetReadyForAction(true);
     }
 
 }

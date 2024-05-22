@@ -35,6 +35,11 @@ public class AnimationControl : MonoBehaviour
         checkMovement();
     }
 
+    public void Hit()
+    {
+        hit();
+    }
+
 
     private void Update()
     {
@@ -52,6 +57,11 @@ public class AnimationControl : MonoBehaviour
     private void checkMovement()
     {
         float speed = cm.CurrentSpeed;
+
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && (int)AnimationState > 3)
+        {
+            AnimationState = AnimationStates.Idle;
+        }
 
         if (speed < speedLimitWalkRun && speed > minSpeed)
         {
@@ -71,7 +81,7 @@ public class AnimationControl : MonoBehaviour
 
     private void idle()
     {
-        if (AnimationState == AnimationStates.Idle) return;
+        if (AnimationState == AnimationStates.Idle || (int)AnimationState > 3) return;
         AnimationState = AnimationStates.Idle;
 
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
@@ -82,7 +92,7 @@ public class AnimationControl : MonoBehaviour
 
     private void run()
     {
-        if (AnimationState == AnimationStates.Run) return;
+        if (AnimationState == AnimationStates.Run || (int)AnimationState > 3) return;
         AnimationState = AnimationStates.Run;
 
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
@@ -91,9 +101,23 @@ public class AnimationControl : MonoBehaviour
         }
     }
 
+    private void hit()
+    {
+        AnimationState = AnimationStates.Hit;
+        _animator.Play("BaseHit");
+        /*
+        if (AnimationState == AnimationStates.Hit) return;
+        AnimationState = AnimationStates.Hit;
+
+        if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("BaseHit"))
+        {
+            _animator.Play("BaseHit");
+        }*/
+    }
+
     private void walk()
     {
-        if (AnimationState == AnimationStates.Walk) return;
+        if (AnimationState == AnimationStates.Walk || (int)AnimationState > 3) return;
         AnimationState = AnimationStates.Walk;
 
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
@@ -108,6 +132,6 @@ public enum AnimationStates
     None,
     Idle,
     Run,
-    Fly,
-    Walk
+    Walk,
+    Hit
 }

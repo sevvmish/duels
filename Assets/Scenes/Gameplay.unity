@@ -312,7 +312,7 @@ Transform:
   m_GameObject: {fileID: 563158925}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 0, y: 9, z: -6.5}
+  m_LocalPosition: {x: 0, y: 10, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -565,7 +565,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3777971368599507569, guid: 87177fb12cf804648b1e5d418988caca, type: 3}
       propertyPath: m_Name
-      value: PlayerDomain
+      value: MainPlayerDomain
       objectReference: {fileID: 0}
     - target: {fileID: 5586044016221635522, guid: 87177fb12cf804648b1e5d418988caca, type: 3}
       propertyPath: m_LocalPosition.x
@@ -614,6 +614,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3777971368599507569, guid: 87177fb12cf804648b1e5d418988caca, type: 3}
       insertIndex: -1
       addedObject: {fileID: 870946706}
+    - targetCorrespondingSourceObject: {fileID: 3777971368599507569, guid: 87177fb12cf804648b1e5d418988caca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 870946712}
   m_SourcePrefab: {fileID: 100100000, guid: 87177fb12cf804648b1e5d418988caca, type: 3}
 --- !u!4 &870946704 stripped
 Transform:
@@ -637,6 +640,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d28d9c88a127249b9b1b768292f109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!81 &870946712
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870946705}
+  m_Enabled: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,7 +673,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &963194227
 Camera:
   m_ObjectHideFlags: 0

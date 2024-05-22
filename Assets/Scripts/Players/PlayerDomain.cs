@@ -7,13 +7,28 @@ using Zenject;
 public class PlayerDomain : MonoBehaviour
 {
     public bool IsReadyForAction { get; private set; }
-    public bool SetReadyForAction(bool isReady) => IsReadyForAction = isReady;
+    public bool SetReadyForAction(bool isReady)
+    {
+        IsReadyForAction = isReady;
+
+        if (allSquad.Count > 0)
+        {            
+            for (int i = 0; i < allSquad.Count; i++)
+            {
+                allSquad[i].IsReadyForAction = isReady;
+            }
+        }
+
+        return IsReadyForAction;
+    }
+        
     public int TeamID { get; private set; } = 1;
-    public float BorderRadius { get; private set; } = 4.5f;
+    public float BorderRadius { get; private set; } = 5f;
     public PlayerTypes PlayerType { get; private set; }
     public List<CharacterManager> PlayerAims => characterAimer.Aims;
     public float CurrentSpeed { get; private set; }
-
+    public float MaxAgentSpeed { get; private set; }
+    
 
     private NavMeshAgent agent;
     private List<CharacterManager> allSquad = new List<CharacterManager>();
@@ -22,13 +37,22 @@ public class PlayerDomain : MonoBehaviour
     private AssetManager assets;
     private CharacterAimer characterAimer;
 
-    private float agentSpeed;
-        
+    
+
+    private bool isReadyForActionLastState;
+
+
     public void SetData(int team, float radius, PlayerTypes _type)
     {
         assets = GameObject.Find("AssetManager").GetComponent<AssetManager>();
         if (agent == null) agent = GetComponent<NavMeshAgent>();
-        agentSpeed = agent.speed;
+
+        if (PlayerType == PlayerTypes.npc)
+        {
+            IsReadyForAction = true;
+        }
+
+        MaxAgentSpeed = agent.speed;
 
         if (_collider == null) _collider = GetComponent<CapsuleCollider>();
 
@@ -49,15 +73,42 @@ public class PlayerDomain : MonoBehaviour
     {
         CurrentSpeed = agent.velocity.magnitude;
 
-        if (agent.speed != agentSpeed)
-        {
-            agentSpeed = agent.speed;
+        
 
-            for (int i = 0; i < allSquad.Count; i++)
+        if (PlayerType == PlayerTypes.npc)
+        {
+            //transform.position = allSquad[0].transform.position;
+        }
+        else
+        {
+            /*
+            if (agent.speed != MaxAgentSpeed)
             {
-                allSquad[i].SetSpeed(agentSpeed);
+                MaxAgentSpeed = agent.speed;
+
+                for (int i = 0; i < allSquad.Count; i++)
+                {
+                    allSquad[i].SetSpeed(MaxAgentSpeed);
+                }
+            }*/
+
+            if (!IsReadyForAction && isReadyForActionLastState)
+            {
+                isReadyForActionLastState = false;
+
+                List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);
+                for (int i = 0; i < allSquad.Count; i++)
+                {
+                    allSquad[i].WalkToPoint(pos[i] + transform.position);
+                }
+
+            }
+            else if (IsReadyForAction && !isReadyForActionLastState)
+            {
+                isReadyForActionLastState = true;
             }
         }
+
     }
 
 
@@ -66,35 +117,55 @@ public class PlayerDomain : MonoBehaviour
         //GameObject g = Instantiate(Resources.Load<GameObject>("CharacterManager"), transform);
         //CharacterManager m = g.GetComponent<CharacterManager>();
         //CharacterManager m = factory.Create();
+        if (PlayerType == PlayerTypes.npc)
+        {
+            agent.speed = c.CurrentSpeed;
+            MaxAgentSpeed = c.CurrentSpeed;
+        }
+
         CharacterManager m = Instantiate(assets.CharacterManagerPool.GetObject(), transform).GetComponent<CharacterManager>();
         m.gameObject.SetActive(true);
         m.transform.parent = transform;
         m.transform.localPosition = Vector3.zero;
         m.gameObject.name = c.Name;
-        m.SetCharacter(c, TeamID, agent.speed, Character.GetCharacterObject(c.CharacterTypes), this);
+        m.SetCharacter(c, TeamID, agent.speed, Character.GetCharacterObject(c.CharacterTypes), PlayerAims, PlayerType, this);
         allSquad.Add(m);
 
         List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);
         for (int i = 0; i < allSquad.Count; i++)
         {
-            allSquad[i].WalkToPoint(pos[i] / 1.5f + transform.position);
+            allSquad[i].WalkToPoint(pos[i] + transform.position);
         }
     }
 
     public void WalkToPoint(Vector3 _point)
     {
         if (agent.isStopped) agent.isStopped = false;
-        agent.SetDestination(_point);
 
-        if (allSquad.Count > 0)
+        if (PlayerType == PlayerTypes.npc)
         {
-            List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);
-            for (int i = 0; i < allSquad.Count; i++)
+            agent.SetDestination(_point);
+        }
+        else
+        {
+            agent.SetDestination(_point);
+
+            if (allSquad.Count > 0)
             {
-                allSquad[i].WalkToPoint(pos[i]/1.5f + _point);
+                List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);
+                for (int i = 0; i < allSquad.Count; i++)
+                {
+                    allSquad[i].WalkToPoint(pos[i] + _point);
+                }
             }
-        }        
+        }
+
+        
+
+
     }
+
+
 
     private List<Vector3> getPositionDeltaByCount(int count)
     {
@@ -111,14 +182,14 @@ public class PlayerDomain : MonoBehaviour
                 break;
 
             case 2:
-                result.Add(new Vector3(-1, 0, -1));
-                result.Add(new Vector3(1, 0, 1));
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
                 break;
 
             case 3:
                 result.Add(Vector3.zero);
-                result.Add(new Vector3(-1, 0, -1));
-                result.Add(new Vector3(1, 0, 1));
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
                 break;
         }
 

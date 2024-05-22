@@ -23,7 +23,7 @@ public class CharacterAimer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isInited && other.gameObject.TryGetComponent(out CharacterManager c) && c.TeamID != team)
+        if (isInited && other.gameObject.TryGetComponent(out CharacterManager c) && c.TeamID != team && c.Character.IsAlive)
         {
             addAim(c);            
         }
