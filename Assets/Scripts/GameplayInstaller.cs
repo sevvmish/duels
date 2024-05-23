@@ -19,6 +19,7 @@ public class GameplayInstaller : MonoInstaller
 #endif    
 
         Debug.Log("gameplay");
+
         Container.Bind<AssetManager>().FromComponentInHierarchy(true).AsSingle();
         Container.Bind<Joystick>().FromComponentInHierarchy(true).AsSingle();
         Container.Bind<LevelManager>().FromComponentInHierarchy(true).AsSingle();
@@ -36,5 +37,6 @@ public class GameplayInstaller : MonoInstaller
                 
         Container.Bind<PlayerDomain>().FromComponentInHierarchy(true).AsTransient();
         Container.Bind<GameplayUI>().FromComponentInHierarchy(true).AsSingle();
+        Container.Bind<DynamicUI>().FromComponentInHierarchy(true).AsSingle();
     }
 }

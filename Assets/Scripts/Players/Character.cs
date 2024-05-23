@@ -11,6 +11,7 @@ public class Character
     public int Level { get; private set; }
     public float CurrentSpeed { get; private set; }
 
+    public Action OnCharacterDead;
     public float MaxHP { get => (BaseHP + DeltaHP * Level) * HPKoeff; }
     public float CurrentHP { get; private set; }
     public float BaseHP { get; private set; }
@@ -126,9 +127,9 @@ public class Character
         Character c = new Character();
         c.CharacterTypes = CharacterTypesByUniqueName.TestBoss;
 
-        c.BaseHP = 80;
+        c.BaseHP = 300;
         c.DeltaHP = 10;
-        c.BaseDamage = 5;
+        c.BaseDamage = 20;
         c.DeltaDamage = 3;
 
         c.Name = "TestBoss";
@@ -145,6 +146,9 @@ public class Character
     }
 
     //=========================Public=============================
+
+
+
     public void ReceiveDamage(float damage)
     {
         if (!IsAlive) return;
@@ -152,6 +156,7 @@ public class Character
 
         if (CurrentHP < 0)
         {
+            OnCharacterDead.Invoke();
             CurrentHP = 0;
         }
     }

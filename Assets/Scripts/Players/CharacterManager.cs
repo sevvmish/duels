@@ -21,10 +21,13 @@ public class CharacterManager : MonoBehaviour
     private bool isAttacking;
     private PerformAttack performAttack;
     private float MaxAgentSpeed = 5;
+    private Action<CharacterManager> onDeath;
 
 
-    public GameObject SetCharacter(Character c, int team, float speed, GameObject characterObject, PlayerTypes p)
+    public GameObject SetCharacter(Character c, int team, float speed, GameObject characterObject, PlayerTypes p, Action<CharacterManager> onDeath)
     {
+        this.onDeath = onDeath;
+        c.OnCharacterDead = RegisterMyDeath;
         PlayerType = p;
         agent = GetComponent<NavMeshAgent>();
 
@@ -51,31 +54,16 @@ public class CharacterManager : MonoBehaviour
 
     public void WalkToPoint(Vector3 _point)
     {
-        if (isDeathChecked()) return;
+        if (!Character.IsAlive) return;
 
         if (agent.isStopped) agent.isStopped = false;
         agent.SetDestination(_point);
     }
-
-    private bool isDeathChecked()
-    {
-        if (!Character.IsAlive)
-        {
-            if (agent.enabled) agent.enabled = false;
-            if (_collider.enabled) _collider.enabled = false;
-            agent.speed = 0;
-            IsReadyForAction = false;
-            return true;
-        }
-
-        return false;
-    }
-        
-       
-
+          
+    
     private void Update()
-    {   
-        if (isDeathChecked()) return;
+    {
+        if (!Character.IsAlive) return;
 
         if (IsReadyForAction)
         {            
@@ -109,6 +97,16 @@ public class CharacterManager : MonoBehaviour
                 
         }
     }
+
+    public void RegisterMyDeath()
+    {
+        if (agent.enabled) agent.enabled = false;
+        if (_collider.enabled) _collider.enabled = false;
+        agent.speed = 0;
+        IsReadyForAction = false;
+        onDeath.Invoke(this);
+    }
+
 
     private void RegisterEnemyDeath(Character victim)
     {

@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.TextCore.Text;
 using Zenject;
 
 public class PlayerDomain : MonoBehaviour
 {
-    [Inject] private GameplayUI gameplayUI;
+    [Inject] private DynamicUI dynamicUI;
     public bool IsReadyForAction { get; private set; }
     public bool SetReadyForAction(bool isReady)
     {
@@ -39,6 +40,9 @@ public class PlayerDomain : MonoBehaviour
     private CharacterAimer characterAimer;
         
     private bool isReadyForActionLastState;
+
+    private int index = 0;
+    private float _timer;
 
 
     public void SetData(int team, float radius, float speed, PlayerTypes _type)
@@ -83,17 +87,40 @@ public class PlayerDomain : MonoBehaviour
         {
             isReadyForActionLastState = true;
         }
+
+        if (_timer > 1)
+        {
+            _timer = 0;
+
+        }
+        else
+        {
+            _timer += Time.deltaTime;
+        }
     }
 
+    public void RemoveCharacter(CharacterManager character)
+    {
+        allSquad.Remove(character);
+        character.transform.parent = transform.parent;
+        StartCoroutine(playRemoveCharacter(character));
+    }
+    private IEnumerator playRemoveCharacter(CharacterManager character)
+    {
+        yield return new WaitForSeconds(2);
+        character.gameObject.SetActive(false);
+        assets.CharacterManagerPool.ReturnObject(character.gameObject);
+    }
 
-    public void AddCharacter(Character c)
+    public CharacterManager AddCharacter(Character c)
     {   
-        CharacterManager m = Instantiate(assets.CharacterManagerPool.GetObject(), transform).GetComponent<CharacterManager>();
+        CharacterManager m = assets.CharacterManagerPool.GetObject().GetComponent<CharacterManager>();
         m.gameObject.SetActive(true);
         m.transform.parent = transform;
         m.transform.localPosition = Vector3.zero;
-        m.gameObject.name = c.Name;
-        m.SetCharacter(c, TeamID, MaxAgentSpeed, Character.GetCharacterObject(c.CharacterTypes), PlayerType);
+        m.gameObject.name = c.Name + index;
+        index++;
+        m.SetCharacter(c, TeamID, MaxAgentSpeed, Character.GetCharacterObject(c.CharacterTypes), PlayerType, RemoveCharacter);
         m.PlayerAims = characterAimer.Aims;
         allSquad.Add(m);
 
@@ -103,7 +130,8 @@ public class PlayerDomain : MonoBehaviour
             allSquad[i].WalkToPoint(pos[i] + transform.position);
         }
 
-        gameplayUI.AddCharacter(m);
+        dynamicUI.AddCharacter(m, true);
+        return m;
     }
 
     public void WalkToPoint(Vector3 _point)
