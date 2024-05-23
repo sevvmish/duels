@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -14,6 +15,7 @@ public class MainPlayerControl : MonoBehaviour
 
     private int team = 1;
     private float radius = 5.3f;
+    private float maxSpeed = Globals.PLAYER_BASE_MAXSPEED;
 
     private Vector3 currentDestination, destination;
 
@@ -22,7 +24,13 @@ public class MainPlayerControl : MonoBehaviour
     void Start()
     {
         domain = GetComponent<PlayerDomain>();
-        domain.SetData(team, radius, PlayerTypes.main_player);
+        domain.SetData(team, radius, maxSpeed, PlayerTypes.main_player);
+        domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
+        domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
+        domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
+        domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
+        domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
+        domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
         domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
         domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
 
@@ -32,7 +40,7 @@ public class MainPlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_timer > Globals.PLAYER_UPDATE_COOLDOWN)
+        if (_timer > Globals.PLAYER_UPDATE_JOYSTICK_COOLDOWN)
         {
             _timer = 0;
             
@@ -50,7 +58,7 @@ public class MainPlayerControl : MonoBehaviour
         }
 
 
-        if (inputControl.Direction == Vector2.zero)
+        if (Mathf.Abs(inputControl.Direction.x) < 0.15f && Mathf.Abs(inputControl.Direction.y) < 0.15f)
         {
             domain.SetReadyForAction(true);
 

@@ -5,9 +5,7 @@ using Zenject;
 
 public class GameplayInstaller : MonoInstaller
 {
-    //[SerializeField] private CharacterManager characterManager;
     
-
     public override void InstallBindings()
     {
 #if UNITY_EDITOR         
@@ -19,8 +17,6 @@ public class GameplayInstaller : MonoInstaller
         Globals.Language = Localization.GetInstanse("ru").GetCurrentTranslation();
         Globals.CurrentLevel = Globals.MainPlayerData.Level;
 #endif    
-
-
 
         Debug.Log("gameplay");
         Container.Bind<AssetManager>().FromComponentInHierarchy(true).AsSingle();
@@ -37,9 +33,8 @@ public class GameplayInstaller : MonoInstaller
         Container.Bind<Musics>().FromComponentInHierarchy(true).AsSingle();
         Container.Bind<Sounds>().FromComponentInHierarchy(true).AsSingle();
         Container.Bind<ScreenSaver>().FromComponentInHierarchy(true).AsSingle();
-
-        //Container.BindFactory<CharacterManager, CharacterManager.Factory>().FromComponentInNewPrefab(characterManager);
+                
         Container.Bind<PlayerDomain>().FromComponentInHierarchy(true).AsTransient();
-        Container.Bind<NPCCreator>().FromComponentInHierarchy(true).AsTransient();
+        Container.Bind<GameplayUI>().FromComponentInHierarchy(true).AsSingle();
     }
 }

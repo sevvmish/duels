@@ -8,7 +8,7 @@ public class AnimationControl : MonoBehaviour
     public AnimationStates AnimationState { get; private set; }
 
     private Animator _animator;
-    private float speedLimitWalkRun = 1f;
+    private float speedLimitWalkRun = 2f;
     private float minSpeed = 0.05f;
     private float _timer;
     private readonly float coolDown = 0.1f;
@@ -30,6 +30,7 @@ public class AnimationControl : MonoBehaviour
         checkMovement();
     }
 
+    
     public void Idle()
     {
         checkMovement();
@@ -37,12 +38,15 @@ public class AnimationControl : MonoBehaviour
 
     public void Hit()
     {
+        if (!cm.Character.IsAlive) die();
         hit();
     }
 
 
     private void Update()
     {
+        if (!cm.Character.IsAlive) die();
+
         if (_timer > 0)
         {
             _timer -= Time.deltaTime;
@@ -90,9 +94,20 @@ public class AnimationControl : MonoBehaviour
         }
     }
 
+    private void die()
+    {
+        if (AnimationState == AnimationStates.Dead) return;
+        AnimationState = AnimationStates.Dead;
+
+        if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+        {
+            _animator.Play("Die");
+        }
+    }
+
     private void run()
     {
-        if (AnimationState == AnimationStates.Run || (int)AnimationState > 3) return;
+        if (AnimationState == AnimationStates.Run/* || (int)AnimationState > 3*/) return;
         AnimationState = AnimationStates.Run;
 
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
@@ -117,7 +132,7 @@ public class AnimationControl : MonoBehaviour
 
     private void walk()
     {
-        if (AnimationState == AnimationStates.Walk || (int)AnimationState > 3) return;
+        if (AnimationState == AnimationStates.Walk/* || (int)AnimationState > 3*/) return;
         AnimationState = AnimationStates.Walk;
 
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
@@ -133,5 +148,6 @@ public enum AnimationStates
     Idle,
     Run,
     Walk,
-    Hit
+    Hit,
+    Dead
 }

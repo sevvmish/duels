@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,12 +13,14 @@ public class PerformAttack : MonoBehaviour
     private float _timer;
     private bool isReadyToHit => _timer > attackSpeed;
 
-    public void SetData(Character c, AnimationControl a)
+    private Action<Character> registerKilling;
+
+    public void SetData(Character c, AnimationControl a, Action<Character> k)
     {
         character = c;
         _animator = a;
         _timer = attackSpeed+0.1f;
-
+        registerKilling = k;
     }
 
     private void Update()
@@ -32,13 +35,15 @@ public class PerformAttack : MonoBehaviour
         }
     }
 
-    public void Hit(CharacterManager aim)
+    public void Hit(CharacterManager damager, CharacterManager aim)
     {
         if (isReadyToHit)
         {            
             transform.LookAt(new Vector3(aim.transform.position.x, transform.position.y, aim.transform.position.z));
 
             _animator.Hit();
+
+            aim.ReceiveHit(damager, registerKilling);
             _timer = 0;
         }
     }

@@ -6,6 +6,7 @@ using Zenject;
 
 public class PlayerDomain : MonoBehaviour
 {
+    [Inject] private GameplayUI gameplayUI;
     public bool IsReadyForAction { get; private set; }
     public bool SetReadyForAction(bool isReady)
     {
@@ -36,23 +37,17 @@ public class PlayerDomain : MonoBehaviour
     
     private AssetManager assets;
     private CharacterAimer characterAimer;
-
-    
-
+        
     private bool isReadyForActionLastState;
 
 
-    public void SetData(int team, float radius, PlayerTypes _type)
+    public void SetData(int team, float radius, float speed, PlayerTypes _type)
     {
         assets = GameObject.Find("AssetManager").GetComponent<AssetManager>();
         if (agent == null) agent = GetComponent<NavMeshAgent>();
 
-        if (PlayerType == PlayerTypes.npc)
-        {
-            IsReadyForAction = true;
-        }
-
-        MaxAgentSpeed = agent.speed;
+        agent.speed = speed;
+        MaxAgentSpeed = speed;
 
         if (_collider == null) _collider = GetComponent<CapsuleCollider>();
 
@@ -66,69 +61,40 @@ public class PlayerDomain : MonoBehaviour
             characterAimer = c;
             c.SetData(BorderRadius, TeamID);
         }
-
     }
 
     private void Update()
     {
         CurrentSpeed = agent.velocity.magnitude;
 
-        
 
-        if (PlayerType == PlayerTypes.npc)
+        if (!IsReadyForAction && isReadyForActionLastState)
         {
-            //transform.position = allSquad[0].transform.position;
+            isReadyForActionLastState = false;
+
+            List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);
+            for (int i = 0; i < allSquad.Count; i++)
+            {
+                allSquad[i].WalkToPoint(pos[i] + transform.position);
+            }
+
         }
-        else
+        else if (IsReadyForAction && !isReadyForActionLastState)
         {
-            /*
-            if (agent.speed != MaxAgentSpeed)
-            {
-                MaxAgentSpeed = agent.speed;
-
-                for (int i = 0; i < allSquad.Count; i++)
-                {
-                    allSquad[i].SetSpeed(MaxAgentSpeed);
-                }
-            }*/
-
-            if (!IsReadyForAction && isReadyForActionLastState)
-            {
-                isReadyForActionLastState = false;
-
-                List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);
-                for (int i = 0; i < allSquad.Count; i++)
-                {
-                    allSquad[i].WalkToPoint(pos[i] + transform.position);
-                }
-
-            }
-            else if (IsReadyForAction && !isReadyForActionLastState)
-            {
-                isReadyForActionLastState = true;
-            }
+            isReadyForActionLastState = true;
         }
-
     }
 
 
     public void AddCharacter(Character c)
-    {
-        //GameObject g = Instantiate(Resources.Load<GameObject>("CharacterManager"), transform);
-        //CharacterManager m = g.GetComponent<CharacterManager>();
-        //CharacterManager m = factory.Create();
-        if (PlayerType == PlayerTypes.npc)
-        {
-            agent.speed = c.CurrentSpeed;
-            MaxAgentSpeed = c.CurrentSpeed;
-        }
-
+    {   
         CharacterManager m = Instantiate(assets.CharacterManagerPool.GetObject(), transform).GetComponent<CharacterManager>();
         m.gameObject.SetActive(true);
         m.transform.parent = transform;
         m.transform.localPosition = Vector3.zero;
         m.gameObject.name = c.Name;
-        m.SetCharacter(c, TeamID, agent.speed, Character.GetCharacterObject(c.CharacterTypes), PlayerAims, PlayerType, this);
+        m.SetCharacter(c, TeamID, MaxAgentSpeed, Character.GetCharacterObject(c.CharacterTypes), PlayerType);
+        m.PlayerAims = characterAimer.Aims;
         allSquad.Add(m);
 
         List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);
@@ -136,6 +102,8 @@ public class PlayerDomain : MonoBehaviour
         {
             allSquad[i].WalkToPoint(pos[i] + transform.position);
         }
+
+        gameplayUI.AddCharacter(m);
     }
 
     public void WalkToPoint(Vector3 _point)
@@ -159,10 +127,6 @@ public class PlayerDomain : MonoBehaviour
                 }
             }
         }
-
-        
-
-
     }
 
 
@@ -190,6 +154,121 @@ public class PlayerDomain : MonoBehaviour
                 result.Add(Vector3.zero);
                 result.Add(new Vector3(-0.75f, 0, -0.75f));
                 result.Add(new Vector3(0.75f, 0, 0.75f));
+                break;
+
+            case 4:
+                result.Add(Vector3.zero);
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
+                result.Add(new Vector3(-0.75f, 0, 0.75f));
+                break;
+
+            case 5:
+                result.Add(Vector3.zero);
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
+                result.Add(new Vector3(-0.75f, 0, 0.75f));
+                result.Add(new Vector3(0.75f, 0, -0.75f));
+                break;
+
+            case 6:
+                result.Add(Vector3.zero);
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
+                result.Add(new Vector3(-0.75f, 0, 0.75f));
+                result.Add(new Vector3(0.75f, 0, -0.75f));
+                result.Add(new Vector3(1.5f, 0, 0));
+                break;
+
+            case 7:
+                result.Add(Vector3.zero);
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
+                result.Add(new Vector3(-0.75f, 0, 0.75f));
+                result.Add(new Vector3(0.75f, 0, -0.75f));
+                result.Add(new Vector3(1.5f, 0, 0));
+                result.Add(new Vector3(-1.5f, 0, 0));
+                break;
+
+            case 8:
+                result.Add(Vector3.zero);
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
+                result.Add(new Vector3(-0.75f, 0, 0.75f));
+                result.Add(new Vector3(0.75f, 0, -0.75f));
+                result.Add(new Vector3(1.5f, 0, 0));
+                result.Add(new Vector3(-1.5f, 0, 0));
+                result.Add(new Vector3(0, 0, 1.5f));
+                break;
+
+            case 9:
+                result.Add(Vector3.zero);
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
+                result.Add(new Vector3(-0.75f, 0, 0.75f));
+                result.Add(new Vector3(0.75f, 0, -0.75f));
+                result.Add(new Vector3(1.5f, 0, 0));
+                result.Add(new Vector3(-1.5f, 0, 0));
+                result.Add(new Vector3(0, 0, 1.5f));
+                result.Add(new Vector3(0, 0, -1.5f));
+                break;
+
+            case 10:
+                result.Add(Vector3.zero);
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
+                result.Add(new Vector3(-0.75f, 0, 0.75f));
+                result.Add(new Vector3(0.75f, 0, -0.75f));
+                result.Add(new Vector3(1.5f, 0, 0));
+                result.Add(new Vector3(-1.5f, 0, 0));
+                result.Add(new Vector3(0, 0, 1.5f));
+                result.Add(new Vector3(0, 0, -1.5f));
+                result.Add(new Vector3(1.5f, 0, -1.5f));
+                break;
+
+            case 11:
+                result.Add(Vector3.zero);
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
+                result.Add(new Vector3(-0.75f, 0, 0.75f));
+                result.Add(new Vector3(0.75f, 0, -0.75f));
+                result.Add(new Vector3(1.5f, 0, 0));
+                result.Add(new Vector3(-1.5f, 0, 0));
+                result.Add(new Vector3(0, 0, 1.5f));
+                result.Add(new Vector3(0, 0, -1.5f));
+                result.Add(new Vector3(1.5f, 0, -1.5f));
+                result.Add(new Vector3(-1.5f, 0, 1.5f));
+                break;
+
+            case 12:
+                result.Add(Vector3.zero);
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
+                result.Add(new Vector3(-0.75f, 0, 0.75f));
+                result.Add(new Vector3(0.75f, 0, -0.75f));
+                result.Add(new Vector3(1.5f, 0, 0));
+                result.Add(new Vector3(-1.5f, 0, 0));
+                result.Add(new Vector3(0, 0, 1.5f));
+                result.Add(new Vector3(0, 0, -1.5f));
+                result.Add(new Vector3(1.5f, 0, -1.5f));
+                result.Add(new Vector3(-1.5f, 0, 1.5f));
+                result.Add(new Vector3(1.5f, 0, 1.5f));
+                break;
+
+            case 13:
+                result.Add(Vector3.zero);
+                result.Add(new Vector3(-0.75f, 0, -0.75f));
+                result.Add(new Vector3(0.75f, 0, 0.75f));
+                result.Add(new Vector3(-0.75f, 0, 0.75f));
+                result.Add(new Vector3(0.75f, 0, -0.75f));
+                result.Add(new Vector3(1.5f, 0, 0));
+                result.Add(new Vector3(-1.5f, 0, 0));
+                result.Add(new Vector3(0, 0, 1.5f));
+                result.Add(new Vector3(0, 0, -1.5f));
+                result.Add(new Vector3(1.5f, 0, -1.5f));
+                result.Add(new Vector3(-1.5f, 0, 1.5f));
+                result.Add(new Vector3(1.5f, 0, 1.5f));
+                result.Add(new Vector3(-1.5f, 0, -1.5f));
                 break;
         }
 
