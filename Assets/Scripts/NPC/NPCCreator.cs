@@ -29,7 +29,7 @@ public class NPCCreator : MonoBehaviour
         m.transform.parent = transform;
         m.transform.localPosition = Vector3.zero;
         m.gameObject.name = c.Name;
-        GameObject g = m.SetCharacter(c, team, c.CurrentSpeed, Character.GetCharacterObject(c.CharacterTypes), PlayerTypes.npc, RemoveCharacter);
+        GameObject g = m.SetCharacter(c, team, c.CurrentSpeed, Character.GetCharacterObject(c.CharacterTypeByUniqueName), PlayerTypes.npc, RemoveCharacter, null);
         m.IsReadyForAction = true;
 
         g.AddComponent<CharacterAimer>();
@@ -47,7 +47,7 @@ public class NPCCreator : MonoBehaviour
     }
     private IEnumerator playRemoveCharacter(CharacterManager character)
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION);
         assets.CharacterManagerPool.ReturnObject(character.gameObject);
     }
 

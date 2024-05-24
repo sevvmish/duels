@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.TextCore.Text;
@@ -97,6 +98,14 @@ public class PlayerDomain : MonoBehaviour
         {
             _timer += Time.deltaTime;
         }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            for (int i = 0; i < allSquad.Count; i++)
+            {
+                print(i + " = " + allSquad[i].gameObject.name);
+            }
+        }
     }
 
     public void RemoveCharacter(CharacterManager character)
@@ -107,7 +116,9 @@ public class PlayerDomain : MonoBehaviour
     }
     private IEnumerator playRemoveCharacter(CharacterManager character)
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION/2f);
+        assets.SetGrave(character.transform.position);
+        yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION / 2f);
         character.gameObject.SetActive(false);
         assets.CharacterManagerPool.ReturnObject(character.gameObject);
     }
@@ -120,7 +131,7 @@ public class PlayerDomain : MonoBehaviour
         m.transform.localPosition = Vector3.zero;
         m.gameObject.name = c.Name + index;
         index++;
-        m.SetCharacter(c, TeamID, MaxAgentSpeed, Character.GetCharacterObject(c.CharacterTypes), PlayerType, RemoveCharacter);
+        m.SetCharacter(c, TeamID, MaxAgentSpeed, Character.GetCharacterObject(c.CharacterTypeByUniqueName), PlayerType, RemoveCharacter, this);
         m.PlayerAims = characterAimer.Aims;
         allSquad.Add(m);
 
@@ -155,6 +166,13 @@ public class PlayerDomain : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void AddCollectableObject(CollectableObjects obj, GameObject g)
+    {
+        print("Added " + obj);
+        g.SetActive(false);
+        assets.ShowConsumeGold(g.transform.position + Vector3.up * 0.5f);
     }
 
 
@@ -310,4 +328,10 @@ public enum PlayerTypes
     main_player,
     player,
     npc
+}
+
+public enum CollectableObjects
+{
+    goldCoin,
+    gem
 }

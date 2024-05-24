@@ -9,7 +9,7 @@ public class AnimationControl : MonoBehaviour
 
     private Animator _animator;
     private float speedLimitWalkRun = 2f;
-    private float minSpeed = 0.05f;
+    private float minSpeed = 0.1f;
     private float _timer;
     private readonly float coolDown = 0.1f;
 
@@ -45,8 +45,10 @@ public class AnimationControl : MonoBehaviour
 
     private void Update()
     {
-        if (!cm.Character.IsAlive) die();
+        if (cm == null) return;
 
+        if (!cm.Character.IsAlive) die();
+        
         if (_timer > 0)
         {
             _timer -= Time.deltaTime;
@@ -54,7 +56,7 @@ public class AnimationControl : MonoBehaviour
         }
 
         _timer = coolDown;
-
+        
         checkMovement();
     }
 
@@ -62,11 +64,13 @@ public class AnimationControl : MonoBehaviour
     {
         float speed = cm.CurrentSpeed;
 
+        /*
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && (int)AnimationState > 3)
         {
             AnimationState = AnimationStates.Idle;
         }
-
+        */
+        
         if (speed < speedLimitWalkRun && speed > minSpeed)
         {
             walk();
@@ -79,6 +83,8 @@ public class AnimationControl : MonoBehaviour
         {
             idle();
         }
+        
+        
 
     }
 
@@ -119,7 +125,9 @@ public class AnimationControl : MonoBehaviour
     private void hit()
     {
         AnimationState = AnimationStates.Hit;
-        _animator.Play("BaseHit");
+        _timer = 0.2f;
+        _animator.Play("BaseHit", 0, 0);
+
         /*
         if (AnimationState == AnimationStates.Hit) return;
         AnimationState = AnimationStates.Hit;

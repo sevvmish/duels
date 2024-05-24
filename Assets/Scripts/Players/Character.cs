@@ -6,7 +6,7 @@ using UnityEngine;
 public class Character
 {
     public string Name { get; private set; }
-    public CharacterTypesByUniqueName CharacterTypes { get; private set; }
+    public CharacterTypesByUniqueName CharacterTypeByUniqueName { get; private set; }
     public CharacterQualities CharacterQuality { get; private set; }
     public int Level { get; private set; }
     public float CurrentSpeed { get; private set; }
@@ -54,7 +54,7 @@ public class Character
                 break;
         }
               
-        CharacterTypes = c.CharacterTypes;
+        CharacterTypeByUniqueName = c.CharacterTypeByUniqueName;
         Name = c.Name;
         Level = level;
        
@@ -79,7 +79,7 @@ public class Character
     private Character WarriorSam(int level)
     {
         Character c = new Character();
-        c.CharacterTypes = CharacterTypesByUniqueName.WarriorSam;
+        c.CharacterTypeByUniqueName = CharacterTypesByUniqueName.WarriorSam;
 
         c.BaseHP = 100;
         c.DeltaHP = 5;
@@ -102,7 +102,7 @@ public class Character
     private Character ShooterMike(int level)
     {
         Character c = new Character();
-        c.CharacterTypes = CharacterTypesByUniqueName.ShooterMike;
+        c.CharacterTypeByUniqueName = CharacterTypesByUniqueName.ShooterMike;
 
         c.BaseHP = 80;
         c.DeltaHP = 3;
@@ -125,7 +125,7 @@ public class Character
     private Character TestBoss(int level)
     {
         Character c = new Character();
-        c.CharacterTypes = CharacterTypesByUniqueName.TestBoss;
+        c.CharacterTypeByUniqueName = CharacterTypesByUniqueName.TestBoss;
 
         c.BaseHP = 300;
         c.DeltaHP = 10;

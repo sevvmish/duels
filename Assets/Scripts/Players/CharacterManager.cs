@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,14 +19,26 @@ public class CharacterManager : MonoBehaviour
 
     private NavMeshAgent agent;    
     private CapsuleCollider _collider;
+
     private bool isAttacking;
+
+    private bool isBusy;
+    private Coroutine waitForWalk;
+    private WaitForSeconds zeroOne = new WaitForSeconds(0.1f);
+    private Vector3 newPointToWalk;
+
     private PerformAttack performAttack;
     private float MaxAgentSpeed = 5;
     private Action<CharacterManager> onDeath;
 
+    private WaitForSeconds zeroTwoShort = new WaitForSeconds(0.02f);
 
-    public GameObject SetCharacter(Character c, int team, float speed, GameObject characterObject, PlayerTypes p, Action<CharacterManager> onDeath)
+    private PlayerDomain mainDomain;
+
+
+    public GameObject SetCharacter(Character c, int team, float speed, GameObject characterObject, PlayerTypes p, Action<CharacterManager> onDeath, PlayerDomain domain)
     {
+        mainDomain = domain;
         this.onDeath = onDeath;
         c.OnCharacterDead = RegisterMyDeath;
         PlayerType = p;
@@ -46,24 +59,47 @@ public class CharacterManager : MonoBehaviour
 
         gameObject.AddComponent<PerformAttack>();
         performAttack = GetComponent<PerformAttack>();
-        performAttack.SetData(Character, CharacterAnimator, RegisterEnemyDeath);
+        performAttack.SetData(this, RegisterEnemyDeath);
 
         return g;
     }
+
+    public bool SetBusy(bool isBust) => this.isBusy = isBust;
 
 
     public void WalkToPoint(Vector3 _point)
     {
         if (!Character.IsAlive) return;
 
+        if (isBusy)
+        {
+            if (waitForWalk == null)
+            {
+                waitForWalk = StartCoroutine(playBusyWaitForWalk());
+            }
+
+            newPointToWalk = _point;
+            return;
+        }
+
         if (agent.isStopped) agent.isStopped = false;
         agent.SetDestination(_point);
+    }
+    private IEnumerator playBusyWaitForWalk()
+    {
+        for (float i = 0; i < 1; i+=0.1f)
+        {
+            if (!isBusy) break;
+            yield return zeroOne;
+        }
+
+        WalkToPoint(newPointToWalk);
     }
           
     
     private void Update()
     {
-        if (!Character.IsAlive) return;
+        if (!Character.IsAlive || isBusy) return;
 
         if (IsReadyForAction)
         {            
@@ -99,9 +135,10 @@ public class CharacterManager : MonoBehaviour
     }
 
     public void RegisterMyDeath()
-    {
+    {        
         if (agent.enabled) agent.enabled = false;
         if (_collider.enabled) _collider.enabled = false;
+        StopAllCoroutines();
         agent.speed = 0;
         IsReadyForAction = false;
         onDeath.Invoke(this);
@@ -160,7 +197,7 @@ public class CharacterManager : MonoBehaviour
             if (minDist <= minusDist)
             {                
                 if (agent.hasPath && !agent.isStopped) agent.isStopped = true;
-                performAttack.Hit(this, aim);
+                performAttack.Hit(aim);
             }
             else
             {
@@ -168,5 +205,17 @@ public class CharacterManager : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (PlayerType == PlayerTypes.npc) return;
+
+        if (other.gameObject.layer == 6)
+        {
+            other.GetComponent<BoxCollider>().enabled = false;            
+            mainDomain.AddCollectableObject(CollectableObjects.goldCoin, other.gameObject);
+        }
+    }
+    
 
 }
