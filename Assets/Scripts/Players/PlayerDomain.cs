@@ -117,7 +117,7 @@ public class PlayerDomain : MonoBehaviour
     private IEnumerator playRemoveCharacter(CharacterManager character)
     {
         yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION/2f);
-        assets.SetGrave(character.transform.position);
+        assets.SetGrave(character.transform.position, character.Character.CharacterTypeByCathegory);
         yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION / 2f);
         character.gameObject.SetActive(false);
         assets.CharacterManagerPool.ReturnObject(character.gameObject);

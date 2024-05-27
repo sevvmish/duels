@@ -9,13 +9,17 @@ public class GameplayInstaller : MonoInstaller
     public override void InstallBindings()
     {
 #if UNITY_EDITOR         
-        Globals.MainPlayerData = new PlayerData();
-        Globals.IsInitiated = true;
-        Globals.IsMobile = true;
-        Globals.IsSoundOn = true;
-        Globals.IsMusicOn = true;
-        Globals.Language = Localization.GetInstanse("ru").GetCurrentTranslation();
-        Globals.CurrentLevel = Globals.MainPlayerData.Level;
+        if (Globals.MainPlayerData == null)
+        {
+            Globals.MainPlayerData = new PlayerData();
+            Globals.IsInitiated = true;
+            Globals.IsMobile = true;
+            Globals.IsSoundOn = true;
+            Globals.IsMusicOn = true;
+            Globals.Language = Localization.GetInstanse("ru").GetCurrentTranslation();
+            Globals.CurrentLevel = Globals.MainPlayerData.Level;
+        }
+        
 #endif    
 
         Debug.Log("gameplay");

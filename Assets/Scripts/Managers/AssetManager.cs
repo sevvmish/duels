@@ -15,6 +15,8 @@ public class AssetManager : MonoBehaviour
 
     [Header("Effects")]
     [SerializeField] private GameObject grave01;
+    [SerializeField] private GameObject grave02;
+    [SerializeField] private GameObject grave03Big;
     [SerializeField] private GameObject consumeGold;
 
     [Header("UI")]
@@ -23,6 +25,10 @@ public class AssetManager : MonoBehaviour
 
     public ObjectPool Grave01Pool => grave01Pool;
     private ObjectPool grave01Pool;
+    public ObjectPool Grave02Pool => grave02Pool;
+    private ObjectPool grave02Pool;
+    public ObjectPool Grave03Pool => grave03Pool;
+    private ObjectPool grave03Pool;
 
     public ObjectPool ConsumeGoldPool => consumeGoldPool;
     private ObjectPool consumeGoldPool;
@@ -52,23 +58,45 @@ public class AssetManager : MonoBehaviour
         arrow1Pool = new ObjectPool(20, arrow1, transform);
         meleeSoundsPool = new ObjectPool(20, meleeSwordSounds, transform);
         bowSoundsPool = new ObjectPool(20, bowSounds, transform);
+        
         grave01Pool = new ObjectPool(20, grave01, transform);
+        grave02Pool = new ObjectPool(20, grave02, transform);
+        grave03Pool = new ObjectPool(20, grave03Big, transform);
 
         consumeGoldPool = new ObjectPool(10, consumeGold, transform);
 
         playerIndicatorPool = new ObjectPool(100, playerIndicators, transform);
     }
 
-    public void SetGrave(Vector3 pos)
-    {        
-        GameObject g = Grave01Pool.GetObject();
+    public void SetGrave(Vector3 pos, CharacterTypesByCathegory heroType)
+    {
+        ObjectPool p = default;
+
+        if (heroType == CharacterTypesByCathegory.Squad)
+        {
+            ObjectPool[] pools = new ObjectPool[] { grave01Pool, grave02Pool };
+            p = pools[UnityEngine.Random.Range(0, pools.Length)];
+        }
+        else if (heroType == CharacterTypesByCathegory.SquadHero)
+        {
+            p = grave03Pool;
+        }
+
+
+        GameObject g = p.GetObject();
         g.transform.position = pos;
         Transform t = g.transform.GetChild(0);
         t.position = pos + Vector3.up * 10f;
-        t.eulerAngles += new Vector3(0, -20/*UnityEngine.Random.Range(-30,30)*/, 0);
+        t.eulerAngles += new Vector3(0, UnityEngine.Random.Range(-15,-25), 0);
         g.SetActive(true);
-        t.DOMoveY(pos.y, 0.5f).SetEase(Ease.OutElastic);
+        t.DOMoveY(pos.y, 0.5f).SetEase(Ease.OutExpo);
     }   
+
+    public IEnumerator returnObjectToPool(ObjectPool pool, GameObject g, float _timer)
+    {
+        yield return new WaitForSeconds(_timer);
+        pool.ReturnObject(g);
+    }
     
     public void ShowConsumeGold(Vector3 pos)
     {

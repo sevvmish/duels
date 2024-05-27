@@ -7,6 +7,7 @@ public class Character
 {
     public string Name { get; private set; }
     public CharacterTypesByUniqueName CharacterTypeByUniqueName { get; private set; }
+    public CharacterTypesByCathegory CharacterTypeByCathegory { get; private set; }
     public CharacterQualities CharacterQuality { get; private set; }
     public int Level { get; private set; }
     public float CurrentSpeed { get; private set; }
@@ -96,6 +97,7 @@ public class Character
         c.AttackSpeed = 0.7f;
         c.Size = CharacterSized.small;
         c.CurrentSpeed = 3;
+        c.CharacterTypeByCathegory = CharacterTypesByCathegory.Squad;
         return c;
     }
 
@@ -119,6 +121,7 @@ public class Character
         c.AttackSpeed = 0.8f;
         c.Size = CharacterSized.small;
         c.CurrentSpeed = 3;
+        c.CharacterTypeByCathegory = CharacterTypesByCathegory.SquadHero;
         return c;
     }
 
@@ -129,7 +132,7 @@ public class Character
 
         c.BaseHP = 300;
         c.DeltaHP = 10;
-        c.BaseDamage = 20;
+        c.BaseDamage = 30;
         c.DeltaDamage = 3;
 
         c.Name = "TestBoss";
@@ -142,6 +145,7 @@ public class Character
         c.AttackSpeed = 0.9f;
         c.Size = CharacterSized.small;
         c.CurrentSpeed = 3;
+        c.CharacterTypeByCathegory = CharacterTypesByCathegory.NPS_medium;
         return c;
     }
 
@@ -200,6 +204,7 @@ public enum CharacterTypesByUniqueName
 public enum CharacterTypesByCathegory
 {
     Squad,
+    SquadHero,
     NPS_small,
     NPS_medium,
     NPS_large,

@@ -49,5 +49,7 @@ MonoBehaviour:
   meleeSwordSounds: {fileID: 798181527926389370, guid: c02b77011bcac714a9e3dcf658a8aa89, type: 3}
   bowSounds: {fileID: 5364755253617782784, guid: fe06d15836b43984fbbaf15b04138488, type: 3}
   grave01: {fileID: 6706824789851280371, guid: 8654bcbb5b5450c42a63623b97c413fa, type: 3}
+  grave02: {fileID: 5169108517349701197, guid: 8f9472c7bbc3086449ee797e9c923066, type: 3}
+  grave03Big: {fileID: 602534998851705074, guid: 523f2edd343fcaa4d86d5867674482c6, type: 3}
   consumeGold: {fileID: 1491710503566559369, guid: 36d38a1ec67c18748933453ec6e7d9c8, type: 3}
   playerIndicators: {fileID: 1728870804547820515, guid: 9aae0dddd94bcb943a2ca8b08ab2611f, type: 3}
