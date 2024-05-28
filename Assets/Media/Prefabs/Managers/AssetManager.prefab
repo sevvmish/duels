@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterManager: {fileID: 8664223362862218502, guid: 67ebeeb3abec6d54ea2d229e22bbd157, type: 3}
+  npcCharacter: {fileID: 6281935715966961826, guid: ef9a05fab586ed04583e26c0e9622a5f, type: 3}
   arrow1: {fileID: 2828872119093191639, guid: 2a2aa7d1caeaed943b87ed9c065e2138, type: 3}
   meleeSwordSounds: {fileID: 798181527926389370, guid: c02b77011bcac714a9e3dcf658a8aa89, type: 3}
   bowSounds: {fileID: 5364755253617782784, guid: fe06d15836b43984fbbaf15b04138488, type: 3}

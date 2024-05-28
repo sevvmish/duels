@@ -7,6 +7,7 @@ public class AssetManager : MonoBehaviour
 {
     [Header("Main")]
     [SerializeField] private GameObject characterManager;
+    [SerializeField] private GameObject npcCharacter;
 
     [Header("Hits and weapons")]
     [SerializeField] private GameObject arrow1;
@@ -36,6 +37,9 @@ public class AssetManager : MonoBehaviour
     public ObjectPool CharacterManagerPool => characterManagerPool;
     private ObjectPool characterManagerPool;
 
+    public ObjectPool NpcCharacterPool => npcCharacterPool;
+    private ObjectPool npcCharacterPool;
+
     public ObjectPool Arrow1Pool => arrow1Pool;
     private ObjectPool arrow1Pool;
 
@@ -54,6 +58,7 @@ public class AssetManager : MonoBehaviour
         gameObject.name = "AssetManager";
 
         characterManagerPool = new ObjectPool(50, characterManager, transform);
+        npcCharacterPool = new ObjectPool(50, npcCharacter, transform);
 
         arrow1Pool = new ObjectPool(20, arrow1, transform);
         meleeSoundsPool = new ObjectPool(20, meleeSwordSounds, transform);

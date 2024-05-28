@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(CapsuleCollider))]
 public class CharacterAimer : MonoBehaviour
 {
-    public List<CharacterManager> Aims { get; private set; }
+    public List<IPlayer> Aims { get; private set; }
 
     private CapsuleCollider _collider;
     private int team;
@@ -24,7 +24,7 @@ public class CharacterAimer : MonoBehaviour
         _collider.height = 0;
         _collider.isTrigger = true;
 
-        Aims = new List<CharacterManager> ();
+        Aims = new List<IPlayer> ();
                 
         this.team = team;
         isInited = true;
@@ -32,7 +32,7 @@ public class CharacterAimer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isInited && other.gameObject.layer == 3 && other.gameObject.TryGetComponent(out CharacterManager c) && c.TeamID != team && c.Character.IsAlive)
+        if (isInited && other.gameObject.layer == 3 && other.gameObject.TryGetComponent(out IPlayer c) && c.TeamID != team && c.Character.IsAlive)
         {            
             addAim(c);            
         }
@@ -40,7 +40,7 @@ public class CharacterAimer : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (isInited && other.gameObject.layer == 3 && other.gameObject.TryGetComponent(out CharacterManager c) && c.TeamID != team && c.Character.IsAlive)
+        if (isInited && other.gameObject.layer == 3 && other.gameObject.TryGetComponent(out IPlayer c) && c.TeamID != team && c.Character.IsAlive)
         {            
             addAim(c);
         }
@@ -48,13 +48,13 @@ public class CharacterAimer : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (isInited && other.gameObject.layer == 3 && other.gameObject.TryGetComponent(out CharacterManager c) && c.TeamID != team)
+        if (isInited && other.gameObject.layer == 3 && other.gameObject.TryGetComponent(out IPlayer c) && c.TeamID != team)
         {            
             removeAim(c);
         }
     }
 
-    public void addAim(CharacterManager newAim)
+    public void addAim(IPlayer newAim)
     {
         if (Aims.Contains(newAim)) return;
 
@@ -62,7 +62,7 @@ public class CharacterAimer : MonoBehaviour
         Aims.Add(newAim);
     }
 
-    public void removeAim(CharacterManager newAim)
+    public void removeAim(IPlayer newAim)
     {
         if (!Aims.Contains(newAim)) return;
 

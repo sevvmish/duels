@@ -13,14 +13,14 @@ public class AnimationControl : MonoBehaviour
     private float _timer;
     private readonly float coolDown = 0.1f;
 
-    private CharacterManager cm;    
+    private IPlayer cm;    
 
     private void OnEnable()
     {
         if (_animator == null) _animator = GetComponent<Animator>();
     }
 
-    public void SetData(CharacterManager c)
+    public void SetData(IPlayer c)
     {
         cm = c;
     }

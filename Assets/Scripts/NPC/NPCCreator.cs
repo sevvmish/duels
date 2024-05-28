@@ -22,9 +22,9 @@ public class NPCCreator : MonoBehaviour
         AddCharacter(new Character(currentNPS, 1));
     }
 
-    public CharacterManager AddCharacter(Character c)
+    public NPCCharacter AddCharacter(Character c)
     {
-        CharacterManager m = assets.CharacterManagerPool.GetObject().GetComponent<CharacterManager>();
+        NPCCharacter m = assets.NpcCharacterPool.GetObject().GetComponent<NPCCharacter>();
         m.gameObject.SetActive(true);
         m.transform.parent = transform;
         m.transform.localPosition = Vector3.zero;
@@ -35,17 +35,17 @@ public class NPCCreator : MonoBehaviour
         g.AddComponent<CharacterAimer>();
         CharacterAimer aimer = g.GetComponent<CharacterAimer>();
         aimer.SetData(c.AggroRadius, team);
-        m.PlayerAims = aimer.Aims;
+        m.SetAimer(aimer);
 
         dynamicUI.AddCharacter(m, false);
         return m;
     }
 
-    public void RemoveCharacter(CharacterManager character)
+    public void RemoveCharacter(NPCCharacter character)
     {
         StartCoroutine(playRemoveCharacter(character));
     }
-    private IEnumerator playRemoveCharacter(CharacterManager character)
+    private IEnumerator playRemoveCharacter(NPCCharacter character)
     {
         yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION);
         assets.CharacterManagerPool.ReturnObject(character.gameObject);

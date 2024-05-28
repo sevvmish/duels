@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Properties;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.TextCore.Text;
 using Zenject;
 
 public class PlayerDomain : MonoBehaviour
@@ -27,8 +25,7 @@ public class PlayerDomain : MonoBehaviour
         
     public int TeamID { get; private set; } = 1;
     public float BorderRadius { get; private set; } = 5f;
-    public PlayerTypes PlayerType { get; private set; }
-    public List<CharacterManager> PlayerAims => characterAimer.Aims;
+    public PlayerTypes PlayerType { get; private set; }    
     public float CurrentSpeed { get; private set; }
     public float MaxAgentSpeed { get; private set; }
     
@@ -38,8 +35,8 @@ public class PlayerDomain : MonoBehaviour
     private CapsuleCollider _collider;
     
     private AssetManager assets;
-    private CharacterAimer characterAimer;
-        
+    public CharacterAimer CharacterAimer { get; private set; }
+
     private bool isReadyForActionLastState;
 
     private int index = 0;
@@ -63,7 +60,7 @@ public class PlayerDomain : MonoBehaviour
         _collider.radius = BorderRadius;
         if (TryGetComponent(out CharacterAimer c))
         {
-            characterAimer = c;
+            CharacterAimer = c;
             c.SetData(BorderRadius, TeamID);
         }
     }
@@ -89,10 +86,17 @@ public class PlayerDomain : MonoBehaviour
             isReadyForActionLastState = true;
         }
 
-        if (_timer > 1)
+        if (_timer > 0.5f)
         {
             _timer = 0;
 
+            for (int i = 0; i < allSquad.Count; i++)
+            {
+                if (!allSquad[i].Character.IsAlive)
+                {
+                    RemoveCharacter(allSquad[i]);
+                }
+            }
         }
         else
         {
@@ -132,7 +136,7 @@ public class PlayerDomain : MonoBehaviour
         m.gameObject.name = c.Name + index;
         index++;
         m.SetCharacter(c, TeamID, MaxAgentSpeed, Character.GetCharacterObject(c.CharacterTypeByUniqueName), PlayerType, RemoveCharacter, this);
-        m.PlayerAims = characterAimer.Aims;
+        m.SetAimer(CharacterAimer);
         allSquad.Add(m);
 
         List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);

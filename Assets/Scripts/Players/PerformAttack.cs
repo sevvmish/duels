@@ -9,7 +9,7 @@ public class PerformAttack : MonoBehaviour
     private AssetManager assets;
     private Character character;
     private AnimationControl _animator;
-    private CharacterManager characterManager;
+    private IPlayer myPlayer;
     private float attackSpeed => character.AttackSpeed;
     private float currentDamage => character.CurrentDamage;
 
@@ -23,11 +23,11 @@ public class PerformAttack : MonoBehaviour
         assets = GameObject.Find("AssetManager").GetComponent<AssetManager>();
     }
 
-    public void SetData(CharacterManager characterM, Action<Character> k)
+    public void SetData(IPlayer characterM, AnimationControl a, Action<Character> k)
     {
-        characterManager = characterM;
+        myPlayer = characterM;
         character = characterM.Character;
-        _animator = characterM.CharacterAnimator;
+        _animator = a;
         _timer = attackSpeed + 0.1f;
         registerKilling = k;
     }
@@ -46,10 +46,8 @@ public class PerformAttack : MonoBehaviour
         }
     }
 
-    public void Hit(CharacterManager aim)
-    {
-        //if (character.CharacterTypeByUniqueName == CharacterTypesByUniqueName.ShooterMike) print(isReadyToHit + " !!!! timer: " + _timer + " =  att speed: " + attackSpeed);
-
+    public void Hit(IPlayer aim)
+    {        
         if (isReadyToHit)
         {
             _timer = 0;
@@ -74,11 +72,11 @@ public class PerformAttack : MonoBehaviour
         }
     }
 
-    private IEnumerator meleeHit(CharacterManager aim)
+    private IEnumerator meleeHit(IPlayer aim)
     {
-        transform.LookAt(new Vector3(aim.transform.position.x, transform.position.y, aim.transform.position.z));
+        transform.LookAt(new Vector3(aim.PlayerTransform.position.x, transform.position.y, aim.PlayerTransform.position.z));
         _animator.Hit();
-        characterManager.SetBusy(true);
+        myPlayer.SetBusy(true);
         yield return new WaitForSeconds(0.1f);
 
         GameObject g = assets.MeleeSoundsPool.GetObject();
@@ -86,22 +84,22 @@ public class PerformAttack : MonoBehaviour
         g.SetActive(true);
         yield return new WaitForSeconds(0.1f);
 
-        aim.ReceiveHit(characterManager, registerKilling);
+        aim.ReceiveHit(myPlayer, registerKilling);
 
         yield return new WaitForSeconds(0.1f);
-        characterManager.SetBusy(false);
+        myPlayer.SetBusy(false);
 
         yield return new WaitForSeconds(0.2f);
         assets.MeleeSoundsPool.ReturnObject(g);
     }
 
-    private IEnumerator bowHit(CharacterManager aim)
+    private IEnumerator bowHit(IPlayer aim)
     {
         float maxFlyTime = 0.2f;
 
-        transform.LookAt(new Vector3(aim.transform.position.x, transform.position.y, aim.transform.position.z));
+        transform.LookAt(new Vector3(aim.PlayerTransform.position.x, transform.position.y, aim.PlayerTransform.position.z));
         _animator.Hit();
-        characterManager.SetBusy(true);
+        myPlayer.SetBusy(true);
         yield return new WaitForSeconds(0.3f);
         
         GameObject g = assets.BowSoundsPool.GetObject();
@@ -129,7 +127,7 @@ public class PerformAttack : MonoBehaviour
                 break;
         }
 
-        Vector3 aimPoint = aim.transform.position + upV;
+        Vector3 aimPoint = aim.PlayerTransform.position + upV;
         arrow.transform.LookAt(aimPoint);
         
         float distance = (aimPoint - transform.position).magnitude;
@@ -138,11 +136,11 @@ public class PerformAttack : MonoBehaviour
 
         aimPoint = Vector3.Lerp(myPoint, aimPoint, 0.9f);
         arrow.transform.DOMove(aimPoint, flyTime).SetEase(Ease.Linear);
-        characterManager.SetBusy(false);
+        myPlayer.SetBusy(false);
         yield return new WaitForSeconds(flyTime);        
 
         //if (character.CharacterTypeByUniqueName == CharacterTypesByUniqueName.ShooterMike) print("SHOOOOOOOOOOOTTTTTTT - " + _timer + "  -  " + _timer2);
-        aim.ReceiveHit(characterManager, registerKilling);
+        aim.ReceiveHit(myPlayer, registerKilling);
         assets.Arrow1Pool.ReturnObject(arrow);
 
         yield return new WaitForSeconds(0.2f);

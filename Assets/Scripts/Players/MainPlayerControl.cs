@@ -62,7 +62,7 @@ public class MainPlayerControl : MonoBehaviour
         {
             domain.SetReadyForAction(true);
 
-            if (domain.PlayerAims.Count > 0)
+            if (domain.CharacterAimer.Aims.Count > 0)
             {
                 border.SetBusyWithEnemies(true);
             }

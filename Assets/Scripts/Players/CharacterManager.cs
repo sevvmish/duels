@@ -6,16 +6,16 @@ using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
 
-public class CharacterManager : MonoBehaviour
+public class CharacterManager : MonoBehaviour, IPlayer
 {
     public bool IsReadyForAction;    
-    public List<CharacterManager> PlayerAims;
+    
     public Character Character { get; private set; }
     public float CurrentSpeed { get => agent.velocity.magnitude; }
     public void SetSpeed(float speed) => agent.speed = speed;
     public int TeamID { get; private set; }
-    public AnimationControl CharacterAnimator { get; private set; }
-    public PlayerTypes PlayerType { get; private set; }
+
+    private PlayerTypes playerType;
 
     private NavMeshAgent agent;    
     private CapsuleCollider _collider;
@@ -34,14 +34,25 @@ public class CharacterManager : MonoBehaviour
     private WaitForSeconds zeroTwoShort = new WaitForSeconds(0.02f);
 
     private PlayerDomain mainDomain;
+    private AnimationControl characterAnimator;
 
+    private CharacterAimer aimer;
+    private List<IPlayer> playerAims;
 
+    public void SetAimer(CharacterAimer aimer)
+    {
+        this.aimer = aimer;
+        playerAims = aimer.Aims;
+    }
+
+    public Transform PlayerTransform { get => transform; }
+    
     public GameObject SetCharacter(Character c, int team, float speed, GameObject characterObject, PlayerTypes p, Action<CharacterManager> onDeath, PlayerDomain domain)
     {
         mainDomain = domain;
         this.onDeath = onDeath;
-        c.OnCharacterDead = RegisterMyDeath;
-        PlayerType = p;
+        c.OnCharacterDead = registerMyDeath;
+        playerType = p;
         agent = GetComponent<NavMeshAgent>();
 
         agent.speed = speed;
@@ -51,20 +62,20 @@ public class CharacterManager : MonoBehaviour
         Character = c;
         agent.radius = c.DamageRadius;
         GameObject g = Instantiate(characterObject, transform);        
-        CharacterAnimator = g.GetComponent<AnimationControl>();
-        CharacterAnimator.SetData(this);
+        characterAnimator = g.GetComponent<AnimationControl>();
+        characterAnimator.SetData(this);
         TeamID = team;
         _collider.radius = c.DamageRadius;
         g.SetActive(true);
 
         gameObject.AddComponent<PerformAttack>();
         performAttack = GetComponent<PerformAttack>();
-        performAttack.SetData(this, RegisterEnemyDeath);
+        performAttack.SetData(this, characterAnimator, RegisterEnemyKilled);
 
         return g;
     }
 
-    public bool SetBusy(bool isBust) => this.isBusy = isBust;
+    public bool SetBusy(bool isBusy) => this.isBusy = isBusy;
 
 
     public void WalkToPoint(Vector3 _point)
@@ -73,10 +84,11 @@ public class CharacterManager : MonoBehaviour
 
         if (isBusy)
         {
+            /*
             if (waitForWalk == null)
             {
                 waitForWalk = StartCoroutine(playBusyWaitForWalk());
-            }
+            }*/
 
             newPointToWalk = _point;
             return;
@@ -109,7 +121,7 @@ public class CharacterManager : MonoBehaviour
             }
                 
 
-            if (PlayerAims.Count > 0)
+            if (playerAims.Count > 0)
             {
                 sendToAttack();
             }
@@ -129,12 +141,11 @@ public class CharacterManager : MonoBehaviour
             else
             {
                 agent.speed = MaxAgentSpeed;
-            }
-                
+            }                
         }
     }
 
-    public void RegisterMyDeath()
+    private void registerMyDeath()
     {        
         if (agent.enabled) agent.enabled = false;
         if (_collider.enabled) _collider.enabled = false;
@@ -145,12 +156,12 @@ public class CharacterManager : MonoBehaviour
     }
 
 
-    private void RegisterEnemyDeath(Character victim)
+    private void RegisterEnemyKilled(Character victim)
     {
         print(victim.Name + " is killed by " + gameObject.name);
     }
 
-    public void ReceiveHit(CharacterManager damager, Action<Character> killInfo)
+    public void ReceiveHit(IPlayer damager, Action<Character> killInfo)
     {
         if (!Character.IsAlive) return;
 
@@ -162,7 +173,7 @@ public class CharacterManager : MonoBehaviour
         }
         else
         {
-            if (PlayerType == PlayerTypes.npc) PlayerAims.Add(damager);
+            if (playerType == PlayerTypes.npc) playerAims.Add(damager);
         }
     }
 
@@ -172,21 +183,21 @@ public class CharacterManager : MonoBehaviour
         isAttacking = true;
         
         float minDist = float.MaxValue;
-        CharacterManager aim = null;
+        IPlayer aim = null;
 
-        for (int i = 0; i < PlayerAims.Count; i++)
+        for (int i = 0; i < playerAims.Count; i++)
         {
-            if (!PlayerAims[i].Character.IsAlive)
+            if (!playerAims[i].Character.IsAlive)
             {
-                PlayerAims.Remove(PlayerAims[i]);
+                playerAims.Remove(playerAims[i]);
                 continue;
             }
 
-            float distance = (PlayerAims[i].transform.position - transform.position).magnitude;
+            float distance = (playerAims[i].PlayerTransform.position - transform.position).magnitude;
             if (distance < minDist)
             {
                 minDist = distance;
-                aim = PlayerAims[i];
+                aim = playerAims[i];
             }
         }
 
@@ -201,14 +212,14 @@ public class CharacterManager : MonoBehaviour
             }
             else
             {
-                WalkToPoint(aim.transform.position);
+                WalkToPoint(aim.PlayerTransform.position);
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (PlayerType == PlayerTypes.npc) return;
+        if (playerType == PlayerTypes.npc) return;
 
         if (other.gameObject.layer == 6)
         {

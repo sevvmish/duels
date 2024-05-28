@@ -12,8 +12,8 @@ public class DynamicUI : MonoBehaviour
     [Inject] private MainPlayerControl mainPlayer;
     [Inject] private AssetManager assets;
 
-    private List<CharacterManager> characters = new List<CharacterManager>();
-    private Dictionary<CharacterManager, PlayerIndicatorUI> data = new Dictionary<CharacterManager, PlayerIndicatorUI>();
+    private List<IPlayer> characters = new List<IPlayer>();
+    private Dictionary<IPlayer, PlayerIndicatorUI> data = new Dictionary<IPlayer, PlayerIndicatorUI>();
 
 
     // Update is called once per frame
@@ -21,7 +21,7 @@ public class DynamicUI : MonoBehaviour
     {
         for (int i = 0; i < characters.Count; i++)
         {
-            Vector3 pl = characters[i].transform.position;
+            Vector3 pl = characters[i].PlayerTransform.position;
             Vector3 main = mainPlayer.transform.position + Vector3.forward*2;
 
             if (Mathf.Abs(pl.x - main.x) < 15 && Mathf.Abs(pl.z - main.z) < 10)
@@ -62,7 +62,7 @@ public class DynamicUI : MonoBehaviour
 
     }
 
-    public void AddCharacter(CharacterManager c, bool isPlayer)
+    public void AddCharacter(IPlayer c, bool isPlayer)
     {
         characters.Add(c);
         GameObject g = assets.PlayerIndicatorPool.GetObject();
@@ -73,7 +73,7 @@ public class DynamicUI : MonoBehaviour
         data.Add(c, pi);
     }
 
-    public void RemoveCharacter(CharacterManager c)
+    public void RemoveCharacter(IPlayer c)
     {
         characters.Remove(c);
         assets.PlayerIndicatorPool.ReturnObject(data[c].gameObject);

@@ -21,6 +21,15 @@ public class CameraControl : MonoBehaviour
         cameraBody.position = defaultPosition;
         cameraBody.eulerAngles = defaultRotation;
         mainPlayer = mainPlayerControl.transform;
+
+        if (Globals.IsMobile)
+        {
+            mainCamera.fieldOfView = 60;
+        }
+        else
+        {
+            mainCamera.fieldOfView = 70;
+        }
     }
 
     // Update is called once per frame

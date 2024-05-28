@@ -18,10 +18,12 @@ public class PlayerIndicatorUI : MonoBehaviour
     public RectTransform Rect;
 
     private bool isPlayer;
-    private CharacterManager characterManager;
-    private Action<CharacterManager> remover;
+    private IPlayer characterManager;
+    private Action<IPlayer> remover;
 
-    public void SetData(bool isPlayer, CharacterManager c, Action<CharacterManager> remover)
+    private float currentValue;
+
+    public void SetData(bool isPlayer, IPlayer c, Action<IPlayer> remover)
     {
         this.remover = remover;
         this.isPlayer = isPlayer;
@@ -46,10 +48,18 @@ public class PlayerIndicatorUI : MonoBehaviour
 
     public void UpdateHP()
     {
-        if (isPlayer)
+        float newValue = characterManager.Character.CurrentHP / characterManager.Character.MaxHP;
+        if (currentValue != newValue)
         {
-            float newValue = characterManager.Character.CurrentHP / characterManager.Character.MaxHP;
+            currentValue = newValue;
+        }
+        else
+        {
+            return;
+        }
 
+        if (isPlayer)
+        {            
             if (newValue > 0)
             {
                 if (Globals.IsLowFPS)
@@ -76,9 +86,7 @@ public class PlayerIndicatorUI : MonoBehaviour
             
         }
         else
-        {
-            float newValue = characterManager.Character.CurrentHP / characterManager.Character.MaxHP;
-
+        {            
             if (newValue > 0)
             {
                 if (Globals.IsLowFPS)
