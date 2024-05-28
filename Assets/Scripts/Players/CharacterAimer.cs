@@ -26,6 +26,8 @@ public class CharacterAimer : MonoBehaviour
 
     public void SetData(float aggroRadius, int team)
     {
+        Aims = new List<IPlayer>();
+        Aims.Clear();
         radius = aggroRadius;
 
         if (_collider == null) _collider = GetComponent<CapsuleCollider>();
@@ -34,7 +36,7 @@ public class CharacterAimer : MonoBehaviour
         _collider.height = 0;
         _collider.isTrigger = true;
 
-        Aims = new List<IPlayer> ();
+        
                 
         this.team = team;
         isInited = true;

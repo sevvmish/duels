@@ -12,16 +12,13 @@ public class NPCCharacter : MonoBehaviour, IPlayer
     public float CurrentSpeed { get => agent.velocity.magnitude; }
     public void SetSpeed(float speed) => agent.speed = speed;
     public int TeamID { get; private set; }
-
-    private PlayerTypes playerType;
-
+        
     private NavMeshAgent agent;
     private CapsuleCollider _collider;
 
     private bool isAttacking;
 
     private bool isBusy;
-    private Coroutine waitForWalk;
     private WaitForSeconds zeroOne = new WaitForSeconds(0.1f);
     private Vector3 newPointToWalk;
 
@@ -33,9 +30,10 @@ public class NPCCharacter : MonoBehaviour, IPlayer
 
     private PlayerDomain mainDomain;
     private AnimationControl characterAnimator;
+    private GameObject characterGameobject;
 
     private CharacterAimer aimer;
-    private List<IPlayer> playerAims;
+    //private List<IPlayer> playerAims;
 
     private float _updateSendToAttack = 0;
 
@@ -46,36 +44,44 @@ public class NPCCharacter : MonoBehaviour, IPlayer
     public void SetAimer(CharacterAimer aimer)
     {
         this.aimer = aimer;
-        playerAims = aimer.Aims;
-        playerAims.Clear();
         aimer.Aims.Clear();
+        //playerAims = aimer.Aims;
+        //playerAims.Clear();
+
     }
 
     public Transform PlayerTransform { get => transform; }
+    public GameObject GetCharacterGameobject => characterGameobject;
 
-    public GameObject SetCharacter(Character c, int team, float speed, GameObject characterObject, PlayerTypes p, Action<NPCCharacter> onDeath, PlayerDomain domain)
+    public GameObject SetCharacter(Character c, int team, float speed, GameObject characterObject, Action<NPCCharacter> onDeath, PlayerDomain domain)
     {
+        _collider = GetComponent<CapsuleCollider>();
+        agent = GetComponent<NavMeshAgent>();
+
         isAttacking = false;
         isBusy = false;
-        waitForWalk = null;
+        agent.enabled = true;
+        _collider.enabled = true;
 
         mainDomain = domain;
         this.onDeath = onDeath;
         c.OnCharacterDead = registerMyDeath;
-        playerType = p;
-        agent = GetComponent<NavMeshAgent>();
+        
 
         agent.speed = speed;
         MaxAgentSpeed = speed;
-        _collider = GetComponent<CapsuleCollider>();
+        
 
         Character = c;
         agent.radius = c.DamageRadius;
         GameObject g = Instantiate(characterObject, transform);
+        characterGameobject = g;
         characterAnimator = g.GetComponent<AnimationControl>();
         characterAnimator.SetData(this);
         TeamID = team;
         _collider.radius = c.DamageRadius;
+        g.transform.localPosition = Vector3.zero;
+        g.transform.localEulerAngles = Vector3.zero;
         g.SetActive(true);
 
         gameObject.AddComponent<PerformAttack>();
@@ -112,7 +118,7 @@ public class NPCCharacter : MonoBehaviour, IPlayer
 
         if (!Character.IsAlive || isBusy) return;
 
-        if (playerAims.Count > 0 && !isAttacking)
+        if (aimer.Aims.Count > 0 && !isAttacking)
         {
             _updateSendToAttack = 0;
             newPointToWalk = transform.position;
@@ -120,15 +126,15 @@ public class NPCCharacter : MonoBehaviour, IPlayer
             //agent.speed = MaxAgentSpeed * 1.5f;
             sendToAttack();
         }
-        else if (playerAims.Count > 0 && isAttacking)
+        else if (aimer.Aims.Count > 0 && isAttacking)
         {
             sendToAttack();
         }
-        else if (playerAims.Count == 0 && isAttacking)
+        else if (aimer.Aims.Count == 0 && isAttacking)
         {
             isAttacking = false;            
         }
-        else if (playerAims.Count == 0 && !isAttacking && agent.speed > MaxAgentSpeed)
+        else if (aimer.Aims.Count == 0 && !isAttacking && agent.speed > MaxAgentSpeed)
         {
             //agent.speed -= Time.deltaTime;
         }
@@ -163,7 +169,7 @@ public class NPCCharacter : MonoBehaviour, IPlayer
         }
         else
         {
-            if (playerType == PlayerTypes.npc) playerAims.Add(damager);
+            aimer.Aims.Add(damager);
         }
     }
 
@@ -179,19 +185,19 @@ public class NPCCharacter : MonoBehaviour, IPlayer
         float minDist = float.MaxValue;
         IPlayer aim = null;
 
-        for (int i = 0; i < playerAims.Count; i++)
+        for (int i = 0; i < aimer.Aims.Count; i++)
         {
-            if (!playerAims[i].Character.IsAlive)
+            if (!aimer.Aims[i].Character.IsAlive)
             {
-                playerAims.Remove(playerAims[i]);
+                aimer.Aims.Remove(aimer.Aims[i]);
                 continue;
             }
 
-            float distance = (playerAims[i].PlayerTransform.position - transform.position).magnitude;
+            float distance = (aimer.Aims[i].PlayerTransform.position - transform.position).magnitude;
             if (distance < minDist)
             {
                 minDist = distance;
-                aim = playerAims[i];
+                aim = aimer.Aims[i];
             }
         }
 

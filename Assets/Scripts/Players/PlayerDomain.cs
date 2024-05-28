@@ -124,6 +124,7 @@ public class PlayerDomain : MonoBehaviour
         assets.SetGrave(character.transform.position, character.Character.CharacterTypeByCathegory);
         yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION / 2f);
         character.gameObject.SetActive(false);
+        assets.ReturnCharacterObject(character.GetCharacterGameobject, character.Character.CharacterTypeByUniqueName);
         assets.CharacterManagerPool.ReturnObject(character.gameObject);
     }
 
@@ -135,7 +136,7 @@ public class PlayerDomain : MonoBehaviour
         m.transform.localPosition = Vector3.zero;
         m.gameObject.name = c.Name + index;
         index++;
-        m.SetCharacter(c, TeamID, MaxAgentSpeed, Character.GetCharacterObject(c.CharacterTypeByUniqueName), PlayerType, RemoveCharacter, this);
+        m.SetCharacter(c, TeamID, MaxAgentSpeed, assets.GetCharacterObject(c.CharacterTypeByUniqueName), RemoveCharacter, this);
         m.SetAimer(CharacterAimer);
         allSquad.Add(m);
 

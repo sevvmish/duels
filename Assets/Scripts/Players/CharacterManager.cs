@@ -15,8 +15,6 @@ public class CharacterManager : MonoBehaviour, IPlayer
     public void SetSpeed(float speed) => agent.speed = speed;
     public int TeamID { get; private set; }
 
-    private PlayerTypes playerType;
-
     private NavMeshAgent agent;    
     private CapsuleCollider _collider;
 
@@ -35,38 +33,51 @@ public class CharacterManager : MonoBehaviour, IPlayer
 
     private PlayerDomain mainDomain;
     private AnimationControl characterAnimator;
+    private GameObject characterGameobject;
 
     private CharacterAimer aimer;
-    private List<IPlayer> playerAims;
+    //private List<IPlayer> playerAims;
     private float _updateSendToAttack = 0;
 
     public void SetAimer(CharacterAimer aimer)
     {
         this.aimer = aimer;
-        playerAims = aimer.Aims;
+        aimer.Aims.Clear();
+        //playerAims = aimer.Aims;
     }
 
     public Transform PlayerTransform { get => transform; }
-    
-    public GameObject SetCharacter(Character c, int team, float speed, GameObject characterObject, PlayerTypes p, Action<CharacterManager> onDeath, PlayerDomain domain)
+    public GameObject GetCharacterGameobject => characterGameobject;
+
+    public GameObject SetCharacter(Character c, int team, float speed, GameObject characterObject, Action<CharacterManager> onDeath, PlayerDomain domain)
     {
+        _collider = GetComponent<CapsuleCollider>();
+        agent = GetComponent<NavMeshAgent>();
+
+        isAttacking = false;
+        isBusy = false;
+        agent.enabled = true;
+        _collider.enabled = true;
+
         mainDomain = domain;
         this.onDeath = onDeath;
         c.OnCharacterDead = registerMyDeath;
-        playerType = p;
-        agent = GetComponent<NavMeshAgent>();
+        
 
         agent.speed = speed;
         MaxAgentSpeed = speed;
-        _collider = GetComponent<CapsuleCollider>();
+        
 
         Character = c;
         agent.radius = c.DamageRadius;
-        GameObject g = Instantiate(characterObject, transform);        
+        GameObject g = Instantiate(characterObject, transform);
+        characterGameobject = g;
         characterAnimator = g.GetComponent<AnimationControl>();
         characterAnimator.SetData(this);
         TeamID = team;
         _collider.radius = c.DamageRadius;
+        g.transform.localPosition = Vector3.zero;
+        g.transform.localEulerAngles = Vector3.zero;
         g.SetActive(true);
 
         gameObject.AddComponent<PerformAttack>();
@@ -127,7 +138,7 @@ public class CharacterManager : MonoBehaviour, IPlayer
             }
                 
 
-            if (playerAims.Count > 0)
+            if (aimer.Aims.Count > 0)
             {
                 sendToAttack();
             }
@@ -178,11 +189,7 @@ public class CharacterManager : MonoBehaviour, IPlayer
         if (!Character.IsAlive)
         {
             killInfo.Invoke(Character);
-        }
-        else
-        {
-            if (playerType == PlayerTypes.npc) playerAims.Add(damager);
-        }
+        }        
     }
 
 
@@ -197,19 +204,19 @@ public class CharacterManager : MonoBehaviour, IPlayer
         float minDist = float.MaxValue;
         IPlayer aim = null;
 
-        for (int i = 0; i < playerAims.Count; i++)
+        for (int i = 0; i < aimer.Aims.Count; i++)
         {
-            if (!playerAims[i].Character.IsAlive)
+            if (!aimer.Aims[i].Character.IsAlive)
             {
-                playerAims.Remove(playerAims[i]);
+                aimer.Aims.Remove(aimer.Aims[i]);
                 continue;
             }
 
-            float distance = (playerAims[i].PlayerTransform.position - transform.position).magnitude;
+            float distance = (aimer.Aims[i].PlayerTransform.position - transform.position).magnitude;
             if (distance < minDist)
             {
                 minDist = distance;
-                aim = playerAims[i];
+                aim = aimer.Aims[i];
             }
         }
 
@@ -230,9 +237,7 @@ public class CharacterManager : MonoBehaviour, IPlayer
     }
 
     private void OnTriggerEnter(Collider other)
-    {
-        if (playerType == PlayerTypes.npc) return;
-
+    {        
         if (other.gameObject.layer == 6)
         {
             other.GetComponent<BoxCollider>().enabled = false;            

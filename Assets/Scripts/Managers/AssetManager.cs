@@ -23,6 +23,13 @@ public class AssetManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject playerIndicators;
 
+    //CHARACTER OBJECTS
+    private ObjectPool WarriorSamPool;
+    private ObjectPool ShooterMikePool;
+    private ObjectPool TestBossPool;
+
+
+
 
     public ObjectPool Grave01Pool => grave01Pool;
     private ObjectPool grave01Pool;
@@ -71,6 +78,11 @@ public class AssetManager : MonoBehaviour
         consumeGoldPool = new ObjectPool(10, consumeGold, transform);
 
         playerIndicatorPool = new ObjectPool(100, playerIndicators, transform);
+
+        //CHARACTER OBJECTS
+        WarriorSamPool = new ObjectPool(10, Resources.Load<GameObject>("Characters/WarriorSam"), transform);
+        ShooterMikePool = new ObjectPool(10, Resources.Load<GameObject>("Characters/ShooterMike"), transform);
+        TestBossPool = new ObjectPool(10, Resources.Load<GameObject>("Characters/TestBoss"), transform);
     }
 
     public void SetGrave(Vector3 pos, CharacterTypesByCathegory heroType)
@@ -115,5 +127,36 @@ public class AssetManager : MonoBehaviour
         g.SetActive(true);
         yield return new WaitForSeconds(_timer);
         pool.ReturnObject(g);
+    }
+
+    public GameObject GetCharacterObject(CharacterTypesByUniqueName _type)
+    {
+        switch (_type)
+        {
+            case CharacterTypesByUniqueName.WarriorSam: return WarriorSamPool.GetObject();
+            case CharacterTypesByUniqueName.ShooterMike: return ShooterMikePool.GetObject();
+            case CharacterTypesByUniqueName.TestBoss: return TestBossPool.GetObject();
+        }
+
+        return null;
+    }
+
+    public void ReturnCharacterObject(GameObject g, CharacterTypesByUniqueName _type)
+    {
+        switch (_type)
+        {
+            case CharacterTypesByUniqueName.WarriorSam: 
+                WarriorSamPool.ReturnObject(g);
+                break;
+
+            case CharacterTypesByUniqueName.ShooterMike:
+                ShooterMikePool.ReturnObject(g);
+                break;
+
+            case CharacterTypesByUniqueName.TestBoss:
+                TestBossPool.ReturnObject(g);
+                break;
+
+        }                
     }
 }

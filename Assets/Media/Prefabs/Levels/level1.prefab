@@ -12304,6 +12304,10 @@ PrefabInstance:
       value: NPCCreator (7)
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -14596,6 +14600,10 @@ PrefabInstance:
       value: NPCCreator (8)
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -15098,6 +15106,10 @@ PrefabInstance:
       value: NPCCreator (15)
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -15224,6 +15236,10 @@ PrefabInstance:
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_Name
       value: NPCCreator (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -19082,6 +19098,10 @@ PrefabInstance:
       value: NPCCreator
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -22836,6 +22856,10 @@ PrefabInstance:
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_Name
       value: NPCCreator (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -27790,6 +27814,10 @@ PrefabInstance:
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_Name
       value: NPCCreator (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -35280,6 +35308,10 @@ PrefabInstance:
       value: NPCCreator (6)
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -40288,6 +40320,10 @@ PrefabInstance:
       value: NPCCreator (2)
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -41610,6 +41646,10 @@ PrefabInstance:
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_Name
       value: NPCCreator (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -49450,6 +49490,10 @@ PrefabInstance:
       value: NPCCreator (11)
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -52296,6 +52340,10 @@ PrefabInstance:
       value: NPCCreator (3)
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -52488,6 +52536,10 @@ PrefabInstance:
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_Name
       value: NPCCreator (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -63192,6 +63244,10 @@ PrefabInstance:
       value: NPCCreator (4)
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -64412,6 +64468,10 @@ PrefabInstance:
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_Name
       value: NPCCreator (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -69096,6 +69156,10 @@ PrefabInstance:
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_Name
       value: NPCCreator (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2118022196813263743, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: m_StaticEditorFlags
