@@ -74,7 +74,7 @@ public class PlayerDomain : MonoBehaviour
         {
             isReadyForActionLastState = false;
 
-            List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);
+            List<Vector3> pos = GetPositionDeltaByCount(allSquad.Count);
             for (int i = 0; i < allSquad.Count; i++)
             {
                 allSquad[i].WalkToPoint(pos[i] + transform.position);
@@ -86,7 +86,7 @@ public class PlayerDomain : MonoBehaviour
             isReadyForActionLastState = true;
         }
 
-        if (_timer > 0.5f)
+        if (_timer > Globals.COOLDOWN_CHECK_DEAD_PLAYERS)
         {
             _timer = 0;
 
@@ -139,7 +139,7 @@ public class PlayerDomain : MonoBehaviour
         m.SetAimer(CharacterAimer);
         allSquad.Add(m);
 
-        List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);
+        List<Vector3> pos = GetPositionDeltaByCount(allSquad.Count);
         for (int i = 0; i < allSquad.Count; i++)
         {
             allSquad[i].WalkToPoint(pos[i] + transform.position);
@@ -153,21 +153,14 @@ public class PlayerDomain : MonoBehaviour
     {
         if (agent.isStopped) agent.isStopped = false;
 
-        if (PlayerType == PlayerTypes.npc)
-        {
-            agent.SetDestination(_point);
-        }
-        else
-        {
-            agent.SetDestination(_point);
+        agent.SetDestination(_point);
 
-            if (allSquad.Count > 0)
+        if (allSquad.Count > 0)
+        {
+            List<Vector3> pos = GetPositionDeltaByCount(allSquad.Count);
+            for (int i = 0; i < allSquad.Count; i++)
             {
-                List<Vector3> pos = getPositionDeltaByCount(allSquad.Count);
-                for (int i = 0; i < allSquad.Count; i++)
-                {
-                    allSquad[i].WalkToPoint(pos[i] + _point);
-                }
+                allSquad[i].WalkToPoint(pos[i] + _point);
             }
         }
     }
@@ -181,7 +174,7 @@ public class PlayerDomain : MonoBehaviour
 
 
 
-    private List<Vector3> getPositionDeltaByCount(int count)
+    public static List<Vector3> GetPositionDeltaByCount(int count)
     {
         List<Vector3> result = new List<Vector3> ();
         

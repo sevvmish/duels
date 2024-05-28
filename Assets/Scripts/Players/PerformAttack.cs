@@ -13,7 +13,7 @@ public class PerformAttack : MonoBehaviour
     private float attackSpeed => character.AttackSpeed;
     private float currentDamage => character.CurrentDamage;
 
-    private float _timer, _timer2;
+    private float _timer;
     private bool isReadyToHit => _timer >= attackSpeed;
 
     private Action<Character> registerKilling;
@@ -33,10 +33,8 @@ public class PerformAttack : MonoBehaviour
     }
 
     private void Update()
-    {
-        _timer2 += Time.deltaTime;
-
-        if (_timer >= attackSpeed)
+    {        
+        if (character != null && _timer >= attackSpeed)
         {            
             
         }

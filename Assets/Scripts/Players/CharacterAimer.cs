@@ -14,6 +14,16 @@ public class CharacterAimer : MonoBehaviour
 
     private float _timer;
 
+    private void Update()
+    {
+        _timer += Time.deltaTime;
+
+        if (_timer > 0.3f)
+        {
+            if (Aims.Count > 0) Aims.Clear();
+        }
+    }
+
     public void SetData(float aggroRadius, int team)
     {
         radius = aggroRadius;
@@ -40,6 +50,8 @@ public class CharacterAimer : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        _timer = 0;
+
         if (isInited && other.gameObject.layer == 3 && other.gameObject.TryGetComponent(out IPlayer c) && c.TeamID != team && c.Character.IsAlive)
         {            
             addAim(c);

@@ -158,7 +158,7 @@ public class Character
         if (!IsAlive) return;
         CurrentHP -= damage;
 
-        if (CurrentHP < 0)
+        if (CurrentHP <= 0)
         {
             OnCharacterDead.Invoke();
             CurrentHP = 0;

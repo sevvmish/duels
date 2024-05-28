@@ -37,16 +37,28 @@ public class NPCCharacter : MonoBehaviour, IPlayer
     private CharacterAimer aimer;
     private List<IPlayer> playerAims;
 
+    private float _updateSendToAttack = 0;
+
+
+    //TODEL
+    public int enemies => aimer.Aims.Count;
+
     public void SetAimer(CharacterAimer aimer)
     {
         this.aimer = aimer;
         playerAims = aimer.Aims;
+        playerAims.Clear();
+        aimer.Aims.Clear();
     }
 
     public Transform PlayerTransform { get => transform; }
 
     public GameObject SetCharacter(Character c, int team, float speed, GameObject characterObject, PlayerTypes p, Action<NPCCharacter> onDeath, PlayerDomain domain)
     {
+        isAttacking = false;
+        isBusy = false;
+        waitForWalk = null;
+
         mainDomain = domain;
         this.onDeath = onDeath;
         c.OnCharacterDead = registerMyDeath;
@@ -81,66 +93,44 @@ public class NPCCharacter : MonoBehaviour, IPlayer
         if (!Character.IsAlive) return;
 
         if (isBusy)
-        {
-            /*
-            if (waitForWalk == null)
-            {
-                waitForWalk = StartCoroutine(playBusyWaitForWalk());
-            }*/
-
+        {            
             newPointToWalk = _point;
             return;
         }
 
-        if (agent.isStopped) agent.isStopped = false;
-        agent.SetDestination(_point);
+        if (agent != null && agent.isOnNavMesh && agent.isStopped) agent.isStopped = false;
+        if (agent != null && agent.isOnNavMesh) agent.SetDestination(_point);
     }
-    private IEnumerator playBusyWaitForWalk()
-    {
-        for (float i = 0; i < 1; i += 0.1f)
-        {
-            if (!isBusy) break;
-            yield return zeroOne;
-        }
-
-        WalkToPoint(newPointToWalk);
-    }
-
+    
 
     private void Update()
     {
+        if (_updateSendToAttack > 0)
+        {
+            _updateSendToAttack -= Time.deltaTime;
+        }
+
         if (!Character.IsAlive || isBusy) return;
 
-        if (IsReadyForAction)
+        if (playerAims.Count > 0 && !isAttacking)
         {
-            if (isAttacking)
-            {
-                agent.speed = MaxAgentSpeed * 1.5f;
-            }
-
-
-            if (playerAims.Count > 0)
-            {
-                sendToAttack();
-            }
-            else
-            {
-                isAttacking = false;
-            }
-
+            _updateSendToAttack = 0;
+            newPointToWalk = transform.position;
+            isAttacking = true;
+            //agent.speed = MaxAgentSpeed * 1.5f;
+            sendToAttack();
         }
-        else
+        else if (playerAims.Count > 0 && isAttacking)
         {
-            isAttacking = false;
-            if (agent.speed > MaxAgentSpeed)
-            {
-                agent.speed -= Time.deltaTime * 3;
-            }
-            else
-            {
-                agent.speed = MaxAgentSpeed;
-            }
-
+            sendToAttack();
+        }
+        else if (playerAims.Count == 0 && isAttacking)
+        {
+            isAttacking = false;            
+        }
+        else if (playerAims.Count == 0 && !isAttacking && agent.speed > MaxAgentSpeed)
+        {
+            //agent.speed -= Time.deltaTime;
         }
     }
 
@@ -158,6 +148,7 @@ public class NPCCharacter : MonoBehaviour, IPlayer
     private void RegisterEnemyKilled(Character victim)
     {
         print(victim.Name + " is killed by " + gameObject.name);
+        _updateSendToAttack = 0;
     }
 
     public void ReceiveHit(IPlayer damager, Action<Character> killInfo)
@@ -180,6 +171,10 @@ public class NPCCharacter : MonoBehaviour, IPlayer
     private void sendToAttack()
     {
         isAttacking = true;
+
+        if (_updateSendToAttack > 0) return;
+
+        _updateSendToAttack = Globals.COOLDOWN_UPDATE_ATTACK_NPC;
 
         float minDist = float.MaxValue;
         IPlayer aim = null;
@@ -213,17 +208,6 @@ public class NPCCharacter : MonoBehaviour, IPlayer
             {
                 WalkToPoint(aim.PlayerTransform.position);
             }
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (playerType == PlayerTypes.npc) return;
-
-        if (other.gameObject.layer == 6)
-        {
-            other.GetComponent<BoxCollider>().enabled = false;
-            mainDomain.AddCollectableObject(CollectableObjects.goldCoin, other.gameObject);
         }
     }
 }

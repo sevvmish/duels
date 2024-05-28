@@ -38,6 +38,7 @@ public class CharacterManager : MonoBehaviour, IPlayer
 
     private CharacterAimer aimer;
     private List<IPlayer> playerAims;
+    private float _updateSendToAttack = 0;
 
     public void SetAimer(CharacterAimer aimer)
     {
@@ -94,8 +95,8 @@ public class CharacterManager : MonoBehaviour, IPlayer
             return;
         }
 
-        if (agent.isStopped) agent.isStopped = false;
-        agent.SetDestination(_point);
+        if (agent != null && agent.isOnNavMesh && agent.isStopped) agent.isStopped = false;
+        if (agent != null && agent.isOnNavMesh) agent.SetDestination(_point);
     }
     private IEnumerator playBusyWaitForWalk()
     {
@@ -111,6 +112,11 @@ public class CharacterManager : MonoBehaviour, IPlayer
     
     private void Update()
     {
+        if (_updateSendToAttack > 0)
+        {
+            _updateSendToAttack -= Time.deltaTime;
+        }
+
         if (!Character.IsAlive || isBusy) return;
 
         if (IsReadyForAction)
@@ -128,6 +134,7 @@ public class CharacterManager : MonoBehaviour, IPlayer
             else
             {
                 isAttacking = false;
+                _updateSendToAttack = 0;
             }
             
         }
@@ -159,6 +166,7 @@ public class CharacterManager : MonoBehaviour, IPlayer
     private void RegisterEnemyKilled(Character victim)
     {
         print(victim.Name + " is killed by " + gameObject.name);
+        _updateSendToAttack = 0;
     }
 
     public void ReceiveHit(IPlayer damager, Action<Character> killInfo)
@@ -181,7 +189,11 @@ public class CharacterManager : MonoBehaviour, IPlayer
     private void sendToAttack()
     {
         isAttacking = true;
-        
+
+        if (_updateSendToAttack > 0) return;
+
+        _updateSendToAttack = Globals.COOLDOWN_UPDATE_ATTACK_PLAYER;
+
         float minDist = float.MaxValue;
         IPlayer aim = null;
 

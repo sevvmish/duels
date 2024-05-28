@@ -32,6 +32,10 @@ public class Globals : MonoBehaviour
     public const float PLAYER_UPDATE_JOYSTICK_COOLDOWN = 0.1f;
     public const float PLAYER_BASE_MAXSPEED = 6f;
     public const float PLAYER_DEATH_WAIT_ANIMATION = 1.5f;
+    public const float COOLDOWN_CHECK_DEAD_PLAYERS = 0.3f;
+    public const float COOLDOWN_CHECK_DEAD_NPC = 0.3f;
+    public const float COOLDOWN_UPDATE_ATTACK_NPC = 0.1f;
+    public const float COOLDOWN_UPDATE_ATTACK_PLAYER = 0.1f;
 
 
     public static bool IsMobileChecker()
