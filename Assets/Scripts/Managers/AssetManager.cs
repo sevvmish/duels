@@ -80,9 +80,9 @@ public class AssetManager : MonoBehaviour
         playerIndicatorPool = new ObjectPool(100, playerIndicators, transform);
 
         //CHARACTER OBJECTS
-        WarriorSamPool = new ObjectPool(10, Resources.Load<GameObject>("Characters/WarriorSam"), transform);
-        ShooterMikePool = new ObjectPool(10, Resources.Load<GameObject>("Characters/ShooterMike"), transform);
-        TestBossPool = new ObjectPool(10, Resources.Load<GameObject>("Characters/TestBoss"), transform);
+        WarriorSamPool = new ObjectPool(30, Resources.Load<GameObject>("Characters/WarriorSam"), transform);
+        ShooterMikePool = new ObjectPool(30, Resources.Load<GameObject>("Characters/ShooterMike"), transform);
+        TestBossPool = new ObjectPool(30, Resources.Load<GameObject>("Characters/TestBoss"), transform);
     }
 
     public void SetGrave(Vector3 pos, CharacterTypesByCathegory heroType)
@@ -104,7 +104,7 @@ public class AssetManager : MonoBehaviour
         g.transform.position = pos;
         Transform t = g.transform.GetChild(0);
         t.position = pos + Vector3.up * 10f;
-        t.eulerAngles += new Vector3(0, UnityEngine.Random.Range(-15,-25), 0);
+        t.eulerAngles += new Vector3(0, UnityEngine.Random.Range(-5,-30), 0);
         g.SetActive(true);
         t.DOMoveY(pos.y, 0.5f).SetEase(Ease.OutExpo);
     }   
