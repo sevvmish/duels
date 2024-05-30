@@ -4,6 +4,7 @@ public class Sounds : MonoBehaviour
 {
     [SerializeField] private AudioClip error1;
     [SerializeField] private AudioClip success1;
+    [SerializeField] private AudioClip success2;
     [SerializeField] private AudioClip win;
     [SerializeField] private AudioClip lose;
     [SerializeField] private AudioClip beepTick;
@@ -33,6 +34,12 @@ public class Sounds : MonoBehaviour
             case SoundTypes.success1:
                 _audio.Stop();
                 _audio.clip = success1;
+                _audio.Play();
+                break;
+
+            case SoundTypes.success2:
+                _audio.Stop();
+                _audio.clip = success2;
                 _audio.Play();
                 break;
 
@@ -85,5 +92,6 @@ public enum SoundTypes
     beepTick,
     beepOut,
     click,
-    boom
+    boom,
+    success2
 }

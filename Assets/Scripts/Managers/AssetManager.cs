@@ -2,23 +2,27 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class AssetManager : MonoBehaviour
 {
+    [Inject] private EffectsManager effects;
+
     [Header("Main")]
     [SerializeField] private GameObject characterManager;
     [SerializeField] private GameObject npcCharacter;
+    [SerializeField] private GameObject goldCoin;
+
+    [Header("Characters")]
+    [SerializeField] private GameObject simpleWarriorWithShield;
+    [SerializeField] private GameObject simpleArcher;
+    [SerializeField] private GameObject simpleMageBold;
 
     [Header("Hits and weapons")]
     [SerializeField] private GameObject arrow1;
     [SerializeField] private GameObject meleeSwordSounds;
     [SerializeField] private GameObject bowSounds;
-
-    [Header("Effects")]
-    [SerializeField] private GameObject grave01;
-    [SerializeField] private GameObject grave02;
-    [SerializeField] private GameObject grave03Big;
-    [SerializeField] private GameObject consumeGold;
+        
 
     [Header("UI")]
     [SerializeField] private GameObject playerIndicators;
@@ -28,24 +32,14 @@ public class AssetManager : MonoBehaviour
     private ObjectPool ShooterMikePool;
     private ObjectPool TestBossPool;
 
-
-
-
-    public ObjectPool Grave01Pool => grave01Pool;
-    private ObjectPool grave01Pool;
-    public ObjectPool Grave02Pool => grave02Pool;
-    private ObjectPool grave02Pool;
-    public ObjectPool Grave03Pool => grave03Pool;
-    private ObjectPool grave03Pool;
-
-    public ObjectPool ConsumeGoldPool => consumeGoldPool;
-    private ObjectPool consumeGoldPool;
-
     public ObjectPool CharacterManagerPool => characterManagerPool;
     private ObjectPool characterManagerPool;
 
     public ObjectPool NpcCharacterPool => npcCharacterPool;
     private ObjectPool npcCharacterPool;
+
+    public ObjectPool GoldCoinPool => goldCoinPool;
+    private ObjectPool goldCoinPool;
 
     public ObjectPool Arrow1Pool => arrow1Pool;
     private ObjectPool arrow1Pool;
@@ -66,60 +60,27 @@ public class AssetManager : MonoBehaviour
 
         characterManagerPool = new ObjectPool(50, characterManager, transform);
         npcCharacterPool = new ObjectPool(50, npcCharacter, transform);
+        goldCoinPool = new ObjectPool(50, goldCoin, transform);
 
         arrow1Pool = new ObjectPool(20, arrow1, transform);
         meleeSoundsPool = new ObjectPool(20, meleeSwordSounds, transform);
         bowSoundsPool = new ObjectPool(20, bowSounds, transform);
         
-        grave01Pool = new ObjectPool(20, grave01, transform);
-        grave02Pool = new ObjectPool(20, grave02, transform);
-        grave03Pool = new ObjectPool(20, grave03Big, transform);
-
-        consumeGoldPool = new ObjectPool(10, consumeGold, transform);
 
         playerIndicatorPool = new ObjectPool(100, playerIndicators, transform);
 
         //CHARACTER OBJECTS
-        WarriorSamPool = new ObjectPool(30, Resources.Load<GameObject>("Characters/WarriorSam"), transform);
-        ShooterMikePool = new ObjectPool(30, Resources.Load<GameObject>("Characters/ShooterMike"), transform);
-        TestBossPool = new ObjectPool(30, Resources.Load<GameObject>("Characters/TestBoss"), transform);
+        WarriorSamPool = new ObjectPool(30, simpleWarriorWithShield, transform);
+        ShooterMikePool = new ObjectPool(30, simpleArcher, transform);
+        TestBossPool = new ObjectPool(30, simpleMageBold, transform);
     }
-
-    public void SetGrave(Vector3 pos, CharacterTypesByCathegory heroType)
-    {
-        ObjectPool p = default;
-
-        if (heroType == CharacterTypesByCathegory.Squad)
-        {
-            ObjectPool[] pools = new ObjectPool[] { grave01Pool, grave02Pool };
-            p = pools[UnityEngine.Random.Range(0, pools.Length)];
-        }
-        else if (heroType == CharacterTypesByCathegory.SquadHero)
-        {
-            p = grave03Pool;
-        }
-
-
-        GameObject g = p.GetObject();
-        g.transform.position = pos;
-        Transform t = g.transform.GetChild(0);
-        t.position = pos + Vector3.up * 10f;
-        t.eulerAngles += new Vector3(0, UnityEngine.Random.Range(-5,-30), 0);
-        g.SetActive(true);
-        t.DOMoveY(pos.y, 0.5f).SetEase(Ease.OutExpo);
-    }   
-
+       
     public IEnumerator returnObjectToPool(ObjectPool pool, GameObject g, float _timer)
     {
         yield return new WaitForSeconds(_timer);
         pool.ReturnObject(g);
     }
     
-    public void ShowConsumeGold(Vector3 pos)
-    {
-        StartCoroutine(playEffect(consumeGoldPool, pos, 1));
-    }
-
     private IEnumerator playEffect(ObjectPool pool, Vector3 pos, float _timer)
     {
         GameObject g = pool.GetObject();

@@ -35,6 +35,7 @@ public class PlayerDomain : MonoBehaviour
     private CapsuleCollider _collider;
     
     private AssetManager assets;
+    private EffectsManager effects;
     public CharacterAimer CharacterAimer { get; private set; }
 
     private bool isReadyForActionLastState;
@@ -46,6 +47,8 @@ public class PlayerDomain : MonoBehaviour
     public void SetData(int team, float radius, float speed, PlayerTypes _type)
     {
         assets = GameObject.Find("AssetManager").GetComponent<AssetManager>();
+        effects = GameObject.Find("EffectsManager").GetComponent<EffectsManager>();
+
         if (agent == null) agent = GetComponent<NavMeshAgent>();
 
         agent.speed = speed;
@@ -103,13 +106,7 @@ public class PlayerDomain : MonoBehaviour
             _timer += Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            for (int i = 0; i < allSquad.Count; i++)
-            {
-                print(i + " = " + allSquad[i].gameObject.name);
-            }
-        }
+        
     }
 
     public void RemoveCharacter(CharacterManager character)
@@ -121,7 +118,7 @@ public class PlayerDomain : MonoBehaviour
     private IEnumerator playRemoveCharacter(CharacterManager character)
     {
         yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION/2f);
-        assets.SetGrave(character.transform.position, character.Character.CharacterTypeByCathegory);
+        effects.SetGrave(character.transform.position, character.Character.CharacterTypeByCathegory);
         yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION / 2f);
         character.gameObject.SetActive(false);
         assets.ReturnCharacterObject(character.GetCharacterGameobject, character.Character.CharacterTypeByUniqueName);
@@ -169,8 +166,8 @@ public class PlayerDomain : MonoBehaviour
     public void AddCollectableObject(CollectableObjects obj, GameObject g)
     {
         print("Added " + obj);
-        g.SetActive(false);
-        assets.ShowConsumeGold(g.transform.position + Vector3.up * 0.5f);
+        
+        effects.ConsumeGold(g);
     }
 
 

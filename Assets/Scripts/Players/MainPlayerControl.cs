@@ -27,12 +27,12 @@ public class MainPlayerControl : MonoBehaviour
         domain.SetData(team, radius, maxSpeed, PlayerTypes.main_player);
         domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
         domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
-        domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
-        domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
-        domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
-        domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
-        domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
-        domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
+        //domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
+        //domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
+        //domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
+        //domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
+        //domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
+        //domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
 
         AddBorderVisual(domain);
     }
@@ -77,6 +77,8 @@ public class MainPlayerControl : MonoBehaviour
             border.SetBusyWithEnemies(false);
         }
     }
+
+    public void AddCharacter(Character c) => domain.AddCharacter(c);
 
     public void AddBorderVisual(PlayerDomain d)
     {

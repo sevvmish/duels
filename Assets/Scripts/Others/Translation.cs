@@ -12,6 +12,10 @@ public class Translation : ScriptableObject
     public string Rare;
     public string Legendary;
 
+    public string ChooseYourSquad;
+    public string Health;
+    public string Damage;
+
 
     public Translation() { }
 }

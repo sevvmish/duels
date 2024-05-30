@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   error1: {fileID: 8300000, guid: 4332cde32f500074789c2c2a3f8c70bc, type: 3}
   success1: {fileID: 8300000, guid: 93fa14219eb3dd64d801e96c6175db99, type: 3}
+  success2: {fileID: 8300000, guid: 6e90b27abb5a2a94d91e38ae99034819, type: 3}
   win: {fileID: 0}
   lose: {fileID: 0}
   beepTick: {fileID: 8300000, guid: b87e3c81ad4c10348a0e380791ca40d0, type: 3}

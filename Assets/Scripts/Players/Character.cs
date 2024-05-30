@@ -24,6 +24,7 @@ public class Character
     public float BaseDamage { get; private set; }
     public float DeltaDamage { get; private set; }
     public float AttackSpeed { get; private set; }
+    public float DPS { get => CurrentDamage / AttackSpeed; }
     public float DamageKoeff { get; private set; } = 1;
 
     public float DamageRadius { get; private set; }
@@ -58,6 +59,7 @@ public class Character
         CharacterTypeByUniqueName = c.CharacterTypeByUniqueName;
         Name = c.Name;
         Level = level;
+        CharacterTypeByCathegory = c.CharacterTypeByCathegory;
        
         BaseHP = c.BaseHP;
         DeltaHP = c.DeltaHP;
@@ -121,7 +123,7 @@ public class Character
         c.AttackSpeed = 0.8f;
         c.Size = CharacterSized.small;
         c.CurrentSpeed = 3;
-        c.CharacterTypeByCathegory = CharacterTypesByCathegory.SquadHero;
+        c.CharacterTypeByCathegory = CharacterTypesByCathegory.Squad;
         return c;
     }
 
@@ -198,7 +200,9 @@ public enum CharacterTypesByUniqueName
 {
     WarriorSam,
     ShooterMike,
-    TestBoss
+    TestBoss,
+    WarriorShieldSwordSimpleHuman,
+    WarriorShieldSwordImprovedHuman
 }
 
 public enum CharacterTypesByCathegory

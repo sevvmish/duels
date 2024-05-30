@@ -7,6 +7,9 @@ public class GameManager : MonoBehaviour
 {
     [Inject] private ScreenSaver screenSaver;
     [Inject] private LevelManager levelManager;
+    [Inject] private ChoosingCharacterUI chooseCharacter;
+    [Inject] private MainPlayerControl mainPlayerControl;
+
 
     private void Awake()
     {
@@ -23,7 +26,6 @@ public class GameManager : MonoBehaviour
                 QualitySettings.shadows = ShadowQuality.HardOnly;
                 QualitySettings.shadowResolution = ShadowResolution.Medium;
             }
-
         }
         else
         {
@@ -41,10 +43,27 @@ public class GameManager : MonoBehaviour
         screenSaver.ShowScreen();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            if (chooseCharacter.IsActive)
+            {
+                chooseCharacter.ActivatePanel(false);
+            }
+            else
+            {
+                chooseCharacter.ActivatePanel(true, new List<Character>() {new Character(CharacterTypesByUniqueName.WarriorSam, 1),
+                                                                           new Character(CharacterTypesByUniqueName.ShooterMike, 1),
+                                                                           new Character(CharacterTypesByUniqueName.TestBoss, 1), }, heroChosen);
+            }
+        }
+    }
+
+    private void heroChosen(Character c)
+    {
+        print("Hero " + c.CharacterTypeByUniqueName.ToString() + " is chosen!");
+        mainPlayerControl.AddCharacter(c);
     }
 
     public void TestGM()
