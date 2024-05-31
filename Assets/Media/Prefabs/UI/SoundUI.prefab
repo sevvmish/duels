@@ -54,6 +54,7 @@ MonoBehaviour:
   beepOut: {fileID: 8300000, guid: 20b324687904eb441b29ec535edd82d3, type: 3}
   click: {fileID: 8300000, guid: 977d2dc8c9361924bb40ce1643f1ad1b, type: 3}
   boom: {fileID: 8300000, guid: 86520c0b5a140be4eac8aa604801ffd2, type: 3}
+  coins: {fileID: 8300000, guid: 3d93cc3e92605604ab2c809a524e44c6, type: 3}
 --- !u!82 &4755135557759212938
 AudioSource:
   m_ObjectHideFlags: 0

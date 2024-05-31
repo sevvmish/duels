@@ -11,6 +11,7 @@ public class Sounds : MonoBehaviour
     [SerializeField] private AudioClip beepOut;
     [SerializeField] private AudioClip click;
     [SerializeField] private AudioClip boom;
+    [SerializeField] private AudioClip coins;
 
     private AudioSource _audio;
 
@@ -78,6 +79,12 @@ public class Sounds : MonoBehaviour
                 _audio.clip = boom;
                 _audio.Play();
                 break;
+
+            case SoundTypes.coins:
+                _audio.Stop();
+                _audio.clip = coins;
+                _audio.Play();
+                break;
         }
     }
 
@@ -93,5 +100,6 @@ public enum SoundTypes
     beepOut,
     click,
     boom,
-    success2
+    success2,
+    coins
 }

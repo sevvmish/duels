@@ -31,6 +31,7 @@ public class Character
     public float HitRadius { get; private set; }
     public float AggroRadius { get; private set; }
     public AttackTypes AttackType { get; private set; }
+    public CharacterGameplayRoles CharacterGameplayRole { get; private set; }
 
     public bool IsAlive { get => CurrentHP > 0; }
     public CharacterSized Size { get; private set; }
@@ -77,6 +78,7 @@ public class Character
         CharacterQuality = c.CharacterQuality;
         CurrentHP = MaxHP;
         CurrentDamage = MaxDamage;
+        CharacterGameplayRole = c.CharacterGameplayRole;
     }
 
     private Character WarriorSam(int level)
@@ -96,6 +98,7 @@ public class Character
         c.AggroRadius = 5f;
         c.CharacterQuality = CharacterQualities.common;
         c.AttackType = AttackTypes.melee_hit;
+        c.CharacterGameplayRole = CharacterGameplayRoles.meleeDamager;
         c.AttackSpeed = 0.7f;
         c.Size = CharacterSized.small;
         c.CurrentSpeed = 3;
@@ -120,6 +123,7 @@ public class Character
         c.AggroRadius = 5f;
         c.CharacterQuality = CharacterQualities.common;
         c.AttackType = AttackTypes.ranged_hit;
+        c.CharacterGameplayRole = CharacterGameplayRoles.rangedDamager;
         c.AttackSpeed = 0.8f;
         c.Size = CharacterSized.small;
         c.CurrentSpeed = 3;
@@ -144,6 +148,7 @@ public class Character
         c.AggroRadius = 5f;
         c.CharacterQuality = CharacterQualities.improved;
         c.AttackType = AttackTypes.melee_hit;
+        c.CharacterGameplayRole = CharacterGameplayRoles.meleeDamager;
         c.AttackSpeed = 0.9f;
         c.Size = CharacterSized.small;
         c.CurrentSpeed = 3;
@@ -227,7 +232,8 @@ public enum CharacterQualities
 public enum AttackTypes
 {
     melee_hit,
-    ranged_hit
+    ranged_hit,
+    magic_hit
 }
 
 public enum CharacterSized
@@ -236,3 +242,13 @@ public enum CharacterSized
     medium,
     big
 }
+
+public enum CharacterGameplayRoles
+{
+    meleeDamager,
+    rangedDamager,
+    tank,
+    healer,
+    magicDamager
+}
+

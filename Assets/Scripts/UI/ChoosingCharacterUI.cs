@@ -10,7 +10,8 @@ using Zenject;
 public class ChoosingCharacterUI : MonoBehaviour
 {
     [Inject] private Sounds sounds;
-    
+    [Inject] private AssetManager assets;
+
     public bool IsActive { get; private set; }
     
     [SerializeField] private RectTransform sidePanel;
@@ -80,6 +81,8 @@ public class ChoosingCharacterUI : MonoBehaviour
     private void playerActivated(Character c)
     {        
         pressedButtonResult?.Invoke(c);
+        pressedButtonResult = null;
+        panels.ForEach(p => p.transform.GetChild(5).GetComponent<Button>().interactable = false);
 
         for (int i = 0; i < charactersToChoose.Count; i++)
         {
@@ -98,7 +101,7 @@ public class ChoosingCharacterUI : MonoBehaviour
         sounds.PlaySound(SoundTypes.success2);
         t.GetChild(6).gameObject.SetActive(true);
         t.DOShakeScale(0.3f, 1, 30).SetEase(Ease.InOutQuad);
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0.5f);
         ActivatePanel(false);
     }
 
@@ -109,8 +112,8 @@ public class ChoosingCharacterUI : MonoBehaviour
         //name
         panel.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = c.CharacterTypeByUniqueName.ToString();
 
-        //damage type
-        //panel.transform.GetChild(2).GetChild(1).GetComponent<Image>().sprite = 
+        //gameplay role
+        panel.transform.GetChild(2).GetChild(1).GetComponent<Image>().sprite = assets.GetIconGameplayRole(c.CharacterGameplayRole);
 
         //character info
         //character unique quality
@@ -131,7 +134,12 @@ public class ChoosingCharacterUI : MonoBehaviour
 
         //activator
         panel.transform.GetChild(5).GetComponent<Button>().onClick.RemoveAllListeners();
-        panel.transform.GetChild(5).GetComponent<Button>().onClick.AddListener(() => { playerActivated(c); });
+        panel.transform.GetChild(5).GetComponent<Button>().interactable = true;
+        panel.transform.GetChild(5).GetComponent<Button>().onClick.AddListener(() => 
+        { 
+
+            playerActivated(c); 
+        });
 
         //outline
         panel.transform.GetChild(6).gameObject.SetActive(false);

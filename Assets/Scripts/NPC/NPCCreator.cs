@@ -21,6 +21,7 @@ public class NPCCreator : MonoBehaviour
     private float _refreshTimer;
 
     private AssetManager assets;
+    private EffectsManager effects;
     private DynamicUI dynamicUI;
     private List<NPCCharacter> allSquad = new List<NPCCharacter>();
     private Vector3 squadPosition;
@@ -31,6 +32,7 @@ public class NPCCreator : MonoBehaviour
     void Start()
     {
         assets = GameObject.Find("AssetManager").GetComponent<AssetManager>();
+        effects = GameObject.Find("EffectsManager").GetComponent<EffectsManager>();
         dynamicUI = GameObject.Find("DynamicCanvas").GetComponent<DynamicUI>();
 
         squadPosition = transform.position;
@@ -160,7 +162,9 @@ public class NPCCreator : MonoBehaviour
     }
     private IEnumerator playRemoveCharacter(NPCCharacter character)
     {
-        yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION);
+        yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION/2);
+        effects.SetNPCDeathEffect(character.transform.position);
+        effects.SpawnGoldCoinsReward(2, character.transform.position);
         assets.ReturnCharacterObject(character.GetCharacterGameobject, character.Character.CharacterTypeByUniqueName);
         assets.NpcCharacterPool.ReturnObject(character.gameObject);
     }

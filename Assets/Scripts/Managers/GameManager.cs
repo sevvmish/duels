@@ -10,6 +10,12 @@ public class GameManager : MonoBehaviour
     [Inject] private ChoosingCharacterUI chooseCharacter;
     [Inject] private MainPlayerControl mainPlayerControl;
 
+    public float SecondsLeftToEndGame { get; private set; }
+    public bool IsGameStarted { get; private set; }
+    public bool IsGameEnded { get; private set; }
+
+    private bool isFirstPlayerChosen;
+
 
     private void Awake()
     {
@@ -34,6 +40,7 @@ public class GameManager : MonoBehaviour
             QualitySettings.shadowResolution = ShadowResolution.Medium;
         }
 
+        SecondsLeftToEndGame = 4 * 60;
         levelManager.SetLevel();
     }
 
@@ -45,6 +52,27 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        //timer
+        if (SecondsLeftToEndGame > 0) SecondsLeftToEndGame -= Time.deltaTime;
+
+        //first player for main player
+        if (!isFirstPlayerChosen && IsGameStarted && !IsGameEnded && mainPlayerControl.MainDomain.PlayerSquadAmount > 0)
+        {
+            isFirstPlayerChosen = true;
+        }
+        
+
+        //WIN OR LOSE
+        if (isFirstPlayerChosen && IsGameStarted && !IsGameEnded && mainPlayerControl.MainDomain.PlayerSquadAmount > 0)
+        {
+            gameLose();
+        }
+        else if (SecondsLeftToEndGame <= 0 && IsGameStarted && !IsGameEnded)
+        {
+            gameEnded();
+        }
+
+        /*
         if (Input.GetKeyDown(KeyCode.J))
         {
             if (chooseCharacter.IsActive)
@@ -57,7 +85,33 @@ public class GameManager : MonoBehaviour
                                                                            new Character(CharacterTypesByUniqueName.ShooterMike, 1),
                                                                            new Character(CharacterTypesByUniqueName.TestBoss, 1), }, heroChosen);
             }
+        }*/
+    }
+
+    public void TurnOnChoseCharacterProcess(bool isMainPlayer, SpawnPortal portal)
+    {
+        portal.StartCooldown();
+
+        if (isMainPlayer)
+        {   
+            chooseCharacter.ActivatePanel(true, new List<Character>() {new Character(CharacterTypesByUniqueName.WarriorSam, 1),
+                                                                           new Character(CharacterTypesByUniqueName.ShooterMike, 1),
+                                                                           new Character(CharacterTypesByUniqueName.TestBoss, 1), }, heroChosen);
         }
+        else
+        {
+
+        }
+    }
+
+    private void gameLose()
+    {
+        IsGameEnded = true;
+    }
+
+    private void gameEnded()
+    {
+        IsGameEnded = true;
     }
 
     private void heroChosen(Character c)
@@ -65,9 +119,5 @@ public class GameManager : MonoBehaviour
         print("Hero " + c.CharacterTypeByUniqueName.ToString() + " is chosen!");
         mainPlayerControl.AddCharacter(c);
     }
-
-    public void TestGM()
-    {
-        print("Testing GM!!!");
-    }
+        
 }

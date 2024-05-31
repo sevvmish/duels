@@ -239,9 +239,12 @@ public class CharacterManager : MonoBehaviour, IPlayer
     private void OnTriggerEnter(Collider other)
     {        
         if (other.gameObject.layer == 6)
+        {            
+            mainDomain.AddCollectableObject(InteractableObjects.goldCoin, other.gameObject);
+        }
+        else if (other.gameObject.layer == 7)
         {
-            other.GetComponent<BoxCollider>().enabled = false;            
-            mainDomain.AddCollectableObject(CollectableObjects.goldCoin, other.gameObject);
+            mainDomain.AddCollectableObject(InteractableObjects.portal, other.gameObject);
         }
     }
     

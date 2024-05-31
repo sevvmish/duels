@@ -9,8 +9,11 @@ public class MainPlayerControl : MonoBehaviour
 {
     [Inject] private InputControl inputControl;
 
+    public PlayerDomain MainDomain { get; private set; }
+    
+
     private PlayerBorderVisual border;
-    private PlayerDomain domain;
+    
     private float _timer = 0;
 
     private int team = 1;
@@ -23,10 +26,12 @@ public class MainPlayerControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        domain = GetComponent<PlayerDomain>();
-        domain.SetData(team, radius, maxSpeed, PlayerTypes.main_player);
-        domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
-        domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
+        MainDomain = GetComponent<PlayerDomain>();
+        MainDomain.IsItMainPlayer = true;
+        MainDomain.SetData(team, radius, maxSpeed, PlayerTypes.main_player);
+
+        MainDomain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
+        MainDomain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
         //domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
         //domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
         //domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
@@ -34,7 +39,7 @@ public class MainPlayerControl : MonoBehaviour
         //domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
         //domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
 
-        AddBorderVisual(domain);
+        AddBorderVisual(MainDomain);
     }
 
     // Update is called once per frame
@@ -44,10 +49,10 @@ public class MainPlayerControl : MonoBehaviour
         {
             _timer = 0;
             
-            if (inputControl.Direction != Vector2.zero)
+            if (inputControl.Direction != Vector2.zero && MainDomain.IsCanMove)
             {
                 destination = transform.position + new Vector3(inputControl.Direction.x, 0, inputControl.Direction.y) * 2;
-                domain.WalkToPoint(destination);                
+                MainDomain.WalkToPoint(destination);                
             }
 
             currentDestination = destination;
@@ -60,9 +65,9 @@ public class MainPlayerControl : MonoBehaviour
 
         if (Mathf.Abs(inputControl.Direction.x) < 0.15f && Mathf.Abs(inputControl.Direction.y) < 0.15f)
         {
-            domain.SetReadyForAction(true);
+            MainDomain.SetReadyForAction(true);
 
-            if (domain.CharacterAimer.Aims.Count > 0)
+            if (MainDomain.CharacterAimer.Aims.Count > 0)
             {
                 border.SetBusyWithEnemies(true);
             }
@@ -73,12 +78,12 @@ public class MainPlayerControl : MonoBehaviour
         }
         else
         {
-            domain.SetReadyForAction(false);
+            MainDomain.SetReadyForAction(false);
             border.SetBusyWithEnemies(false);
         }
     }
 
-    public void AddCharacter(Character c) => domain.AddCharacter(c);
+    public void AddCharacter(Character c) => MainDomain.AddCharacter(c);
 
     public void AddBorderVisual(PlayerDomain d)
     {

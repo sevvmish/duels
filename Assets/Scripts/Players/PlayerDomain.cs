@@ -7,6 +7,11 @@ using Zenject;
 public class PlayerDomain : MonoBehaviour
 {
     [Inject] private DynamicUI dynamicUI;
+    [Inject] private Sounds sounds;
+    [Inject] private GameManager gm;
+
+    public int GoldCoins {  get; private set; }
+    public int Gems { get; private set; }
     public bool IsReadyForAction { get; private set; }
     public bool SetReadyForAction(bool isReady)
     {
@@ -22,13 +27,18 @@ public class PlayerDomain : MonoBehaviour
 
         return IsReadyForAction;
     }
+
+    public bool IsCanMove { get; private set; } = true;
         
     public int TeamID { get; private set; } = 1;
     public float BorderRadius { get; private set; } = 5f;
     public PlayerTypes PlayerType { get; private set; }    
     public float CurrentSpeed { get; private set; }
     public float MaxAgentSpeed { get; private set; }
-    
+    public List<CharacterManager> PlayerSquad { get => allSquad; }
+    public int PlayerSquadAmount { get => allSquad.Count; }
+    public bool IsItMainPlayer;
+
 
     private NavMeshAgent agent;
     private List<CharacterManager> allSquad = new List<CharacterManager>();
@@ -109,6 +119,8 @@ public class PlayerDomain : MonoBehaviour
         
     }
 
+    public void SetMoveAbility(bool isCanMove) => IsCanMove = isCanMove;
+
     public void RemoveCharacter(CharacterManager character)
     {
         allSquad.Remove(character);
@@ -144,11 +156,14 @@ public class PlayerDomain : MonoBehaviour
         }
 
         dynamicUI.AddCharacter(m, true);
+        effects.SetNewPlayerSpawnEffect(m.transform);
         return m;
     }
 
     public void WalkToPoint(Vector3 _point)
     {
+        if (!IsCanMove) return;
+
         if (agent.isStopped) agent.isStopped = false;
 
         agent.SetDestination(_point);
@@ -163,12 +178,34 @@ public class PlayerDomain : MonoBehaviour
         }
     }
 
-    public void AddCollectableObject(CollectableObjects obj, GameObject g)
+    public void AddCollectableObject(InteractableObjects obj, GameObject g)
     {
         print("Added " + obj);
+
+        switch(obj)
+        {
+            case InteractableObjects.goldCoin:
+                GoldCoins++;
+                effects.ConsumeGold(g);
+                break;
+
+            case InteractableObjects.portal:
+                SpawnPortal portal = g.GetComponent<SpawnPortal>();
+                int cost = portal.GetCost(PlayerSquadAmount);
+
+                if (cost <= GoldCoins)
+                {
+                    GoldCoins -= cost;
+                    gm.TurnOnChoseCharacterProcess(IsItMainPlayer, portal);
+                }
+                
+                break;
+        }
         
-        effects.ConsumeGold(g);
+        
     }
+
+
 
 
 
@@ -325,8 +362,9 @@ public enum PlayerTypes
     npc
 }
 
-public enum CollectableObjects
+public enum InteractableObjects
 {
     goldCoin,
-    gem
+    gem,
+    portal
 }

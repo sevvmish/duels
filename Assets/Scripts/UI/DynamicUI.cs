@@ -7,13 +7,17 @@ using Zenject;
 public class DynamicUI : MonoBehaviour
 {    
     [SerializeField] private Transform location;
-    
+
+    [SerializeField] private GameObject SignUIPrefab;
+
     [Inject] private Camera mainCamera;
     [Inject] private MainPlayerControl mainPlayer;
     [Inject] private AssetManager assets;
 
     private List<IPlayer> characters = new List<IPlayer>();
     private Dictionary<IPlayer, PlayerIndicatorUI> data = new Dictionary<IPlayer, PlayerIndicatorUI>();
+
+    //
 
 
     // Update is called once per frame
@@ -78,5 +82,10 @@ public class DynamicUI : MonoBehaviour
         characters.Remove(c);
         assets.PlayerIndicatorPool.ReturnObject(data[c].gameObject);
         data.Remove(c);
+    }
+
+    public void AddSign(Transform aim)
+    {
+
     }
 }

@@ -47,4 +47,6 @@ MonoBehaviour:
   grave01: {fileID: 6706824789851280371, guid: 8654bcbb5b5450c42a63623b97c413fa, type: 3}
   grave02: {fileID: 5169108517349701197, guid: 8f9472c7bbc3086449ee797e9c923066, type: 3}
   grave03Big: {fileID: 602534998851705074, guid: 523f2edd343fcaa4d86d5867674482c6, type: 3}
+  npcDeathEffect: {fileID: 7874937668591792028, guid: c85d609d42759a44d935e8702bb888d9, type: 3}
   consumeGoldEffect: {fileID: 1491710503566559369, guid: 36d38a1ec67c18748933453ec6e7d9c8, type: 3}
+  getNewPlayerEffect: {fileID: 8811936175236427540, guid: 12d3c63d6c96e894c9b6db0575737e07, type: 3}

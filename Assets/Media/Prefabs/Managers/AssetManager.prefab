@@ -53,4 +53,9 @@ MonoBehaviour:
   arrow1: {fileID: 2828872119093191639, guid: 2a2aa7d1caeaed943b87ed9c065e2138, type: 3}
   meleeSwordSounds: {fileID: 798181527926389370, guid: c02b77011bcac714a9e3dcf658a8aa89, type: 3}
   bowSounds: {fileID: 5364755253617782784, guid: fe06d15836b43984fbbaf15b04138488, type: 3}
+  meleeDamagerIcon: {fileID: 21300000, guid: 93d97a4398691495c8a11dfc794b89e0, type: 3}
+  rangedDamagerIcon: {fileID: 21300000, guid: 94ac10234ef1c421aaf199c5b9844220, type: 3}
+  tankIcon: {fileID: 21300000, guid: f0df62318c3f5419389b3f4ed7c7e52d, type: 3}
+  healerIcon: {fileID: 21300000, guid: 24af665ea79dc0f4a902dcdd530655e8, type: 3}
+  magicDamagerIcon: {fileID: 21300000, guid: 3e9dad48384f1114ebd9cb600ec63c9d, type: 3}
   playerIndicators: {fileID: 1728870804547820515, guid: 9aae0dddd94bcb943a2ca8b08ab2611f, type: 3}

@@ -22,7 +22,14 @@ public class AssetManager : MonoBehaviour
     [SerializeField] private GameObject arrow1;
     [SerializeField] private GameObject meleeSwordSounds;
     [SerializeField] private GameObject bowSounds;
-        
+
+    [Header("Gameplay Role UI Sprites")]
+    [SerializeField] private Sprite meleeDamagerIcon;
+    [SerializeField] private Sprite rangedDamagerIcon;
+    [SerializeField] private Sprite tankIcon;
+    [SerializeField] private Sprite healerIcon;
+    [SerializeField] private Sprite magicDamagerIcon;
+
 
     [Header("UI")]
     [SerializeField] private GameObject playerIndicators;
@@ -79,6 +86,20 @@ public class AssetManager : MonoBehaviour
     {
         yield return new WaitForSeconds(_timer);
         pool.ReturnObject(g);
+    }
+
+    public Sprite GetIconGameplayRole(CharacterGameplayRoles _type)
+    {
+        switch(_type)
+        {
+            case CharacterGameplayRoles.meleeDamager: return meleeDamagerIcon;
+            case CharacterGameplayRoles.rangedDamager: return rangedDamagerIcon;
+            case CharacterGameplayRoles.tank: return tankIcon;
+            case CharacterGameplayRoles.healer: return healerIcon;
+            case CharacterGameplayRoles.magicDamager: return magicDamagerIcon;
+        }
+
+        return null;
     }
     
     private IEnumerator playEffect(ObjectPool pool, Vector3 pos, float _timer)
