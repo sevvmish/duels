@@ -20,3 +20,5 @@ MonoBehaviour:
   ChooseYourSquad: 'Choose a new hero:'
   Health: Health
   Damage: Damage
+  Heal: Heal
+  YouLose: 

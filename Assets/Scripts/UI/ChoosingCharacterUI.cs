@@ -110,7 +110,7 @@ public class ChoosingCharacterUI : MonoBehaviour
         panel.transform.localScale = Vector3.one;
 
         //name
-        panel.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = c.CharacterTypeByUniqueName.ToString();
+        panel.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = c.Name;
 
         //gameplay role
         panel.transform.GetChild(2).GetChild(1).GetComponent<Image>().sprite = assets.GetIconGameplayRole(c.CharacterGameplayRole);
@@ -126,7 +126,15 @@ public class ChoosingCharacterUI : MonoBehaviour
         panel.transform.GetChild(3).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().text = Globals.Language.Health;
         panel.transform.GetChild(3).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = c.MaxHP.ToString("f0");
         //DPS
-        panel.transform.GetChild(3).GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = Globals.Language.Damage;
+        if (c.AttackType == AttackTypes.heal)
+        {
+            panel.transform.GetChild(3).GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = Globals.Language.Heal;
+        }
+        else
+        {
+            panel.transform.GetChild(3).GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = Globals.Language.Damage;
+        }
+        
         panel.transform.GetChild(3).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = c.DPS.ToString("f0");
 
         //description

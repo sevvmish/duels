@@ -30,12 +30,12 @@ public class MainPlayerControl : MonoBehaviour
         MainDomain.IsItMainPlayer = true;
         MainDomain.SetData(team, radius, maxSpeed, PlayerTypes.main_player);
 
-        MainDomain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
-        MainDomain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
-        //domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
-        //domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
-        //domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
-        //domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
+        MainDomain.AddCharacter(new Character(CharacterTypesByUniqueName.VikingHero, 1));
+        //MainDomain.AddCharacter(new Character(CharacterTypesByUniqueName.PriestSimpleHuman, 1));
+        //MainDomain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
+        //MainDomain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
+        //MainDomain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
+        //MainDomain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
         //domain.AddCharacter(new Character(CharacterTypesByUniqueName.WarriorSam, 1));
         //domain.AddCharacter(new Character(CharacterTypesByUniqueName.ShooterMike, 1));
 

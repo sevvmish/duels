@@ -50,6 +50,7 @@ MonoBehaviour:
   simpleWarriorWithShield: {fileID: 3509984709288418595, guid: d4903808f5d042f458228a803dddddf6, type: 3}
   simpleArcher: {fileID: 6522818690537447488, guid: 24d616663d251bc4f89383477dcec3ac, type: 3}
   simpleMageBold: {fileID: 2781809531250869418, guid: abb7c451ee12ded46b07e36fc7d4de85, type: 3}
+  vikingHero: {fileID: 3048629930872249657, guid: fce7f90591fce1949b022329fa4c5e59, type: 3}
   arrow1: {fileID: 2828872119093191639, guid: 2a2aa7d1caeaed943b87ed9c065e2138, type: 3}
   meleeSwordSounds: {fileID: 798181527926389370, guid: c02b77011bcac714a9e3dcf658a8aa89, type: 3}
   bowSounds: {fileID: 5364755253617782784, guid: fe06d15836b43984fbbaf15b04138488, type: 3}

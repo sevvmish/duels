@@ -15,6 +15,7 @@ public class Translation : ScriptableObject
     public string ChooseYourSquad;
     public string Health;
     public string Damage;
+    public string Heal;
     public string YouLose;
 
 

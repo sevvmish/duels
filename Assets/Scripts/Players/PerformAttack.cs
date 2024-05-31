@@ -7,6 +7,7 @@ using UnityEngine;
 public class PerformAttack : MonoBehaviour
 {    
     private AssetManager assets;
+    private EffectsManager effects;
     private Character character;
     private AnimationControl _animator;
     private IPlayer myPlayer;
@@ -21,6 +22,7 @@ public class PerformAttack : MonoBehaviour
     private void Start()
     {
         assets = GameObject.Find("AssetManager").GetComponent<AssetManager>();
+        effects = GameObject.Find("EffectsManager").GetComponent<EffectsManager>();
     }
 
     public void SetData(IPlayer characterM, AnimationControl a, Action<Character> k)
@@ -63,11 +65,51 @@ public class PerformAttack : MonoBehaviour
                 case CharacterTypesByUniqueName.TestBoss:
                     StartCoroutine(meleeHit(aim));
                     break;
-            }
 
-            
-
+                case CharacterTypesByUniqueName.VikingHero:
+                    StartCoroutine(meleeHit(aim));
+                    break;
+            }           
         }
+    }
+
+    public void Heal(IPlayer aim)
+    {
+        if (isReadyToHit)
+        {
+            _timer = 0;
+
+            switch (character.CharacterTypeByUniqueName)
+            {
+                case CharacterTypesByUniqueName.PriestSimpleHuman:
+                    StartCoroutine(heal(aim));
+                    break;
+            }
+        }
+    }
+
+    private IEnumerator heal(IPlayer aim)
+    {
+        WaitForSeconds w = new WaitForSeconds(0.05f);
+
+        transform.LookAt(new Vector3(aim.PlayerTransform.position.x, transform.position.y, aim.PlayerTransform.position.z));
+        _animator.Hit();
+        myPlayer.SetBusy(true);
+        yield return new WaitForSeconds(0.15f);
+
+        GameObject g = effects.HealEffectPool.GetObject();
+        aim.ReceiveHeal(myPlayer);
+        myPlayer.SetBusy(false);
+        g.transform.position = aim.PlayerTransform.position;
+        g.SetActive(true);
+
+        for (float i = 0; i < 0.4f; i +=0.05f)
+        {
+            g.transform.position = aim.PlayerTransform.position;
+            yield return w;
+        }
+
+        effects.HealEffectPool.ReturnObject(g);
     }
 
     private IEnumerator meleeHit(IPlayer aim)

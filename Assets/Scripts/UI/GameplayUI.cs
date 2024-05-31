@@ -21,7 +21,7 @@ public class GameplayUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        goldText.text = mainPlayerCoins.ToString("f0");
     }
 
     private void Update()

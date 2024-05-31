@@ -17,6 +17,7 @@ public class AssetManager : MonoBehaviour
     [SerializeField] private GameObject simpleWarriorWithShield;
     [SerializeField] private GameObject simpleArcher;
     [SerializeField] private GameObject simpleMageBold;
+    [SerializeField] private GameObject vikingHero;
 
     [Header("Hits and weapons")]
     [SerializeField] private GameObject arrow1;
@@ -38,6 +39,8 @@ public class AssetManager : MonoBehaviour
     private ObjectPool WarriorSamPool;
     private ObjectPool ShooterMikePool;
     private ObjectPool TestBossPool;
+    private ObjectPool VikingHeroPool;
+    private ObjectPool PriestSimplePool;
 
     public ObjectPool CharacterManagerPool => characterManagerPool;
     private ObjectPool characterManagerPool;
@@ -80,6 +83,8 @@ public class AssetManager : MonoBehaviour
         WarriorSamPool = new ObjectPool(30, simpleWarriorWithShield, transform);
         ShooterMikePool = new ObjectPool(30, simpleArcher, transform);
         TestBossPool = new ObjectPool(30, simpleMageBold, transform);
+        VikingHeroPool = new ObjectPool(30, vikingHero, transform);
+        PriestSimplePool = new ObjectPool(30, simpleMageBold, transform);
     }
        
     public IEnumerator returnObjectToPool(ObjectPool pool, GameObject g, float _timer)
@@ -118,6 +123,8 @@ public class AssetManager : MonoBehaviour
             case CharacterTypesByUniqueName.WarriorSam: return WarriorSamPool.GetObject();
             case CharacterTypesByUniqueName.ShooterMike: return ShooterMikePool.GetObject();
             case CharacterTypesByUniqueName.TestBoss: return TestBossPool.GetObject();
+            case CharacterTypesByUniqueName.VikingHero: return VikingHeroPool.GetObject();
+            case CharacterTypesByUniqueName.PriestSimpleHuman: return PriestSimplePool.GetObject();
         }
 
         return null;
@@ -137,6 +144,14 @@ public class AssetManager : MonoBehaviour
 
             case CharacterTypesByUniqueName.TestBoss:
                 TestBossPool.ReturnObject(g);
+                break;
+
+            case CharacterTypesByUniqueName.VikingHero:
+                VikingHeroPool.ReturnObject(g);
+                break;
+
+            case CharacterTypesByUniqueName.PriestSimpleHuman:
+                PriestSimplePool.ReturnObject(g);
                 break;
 
         }                

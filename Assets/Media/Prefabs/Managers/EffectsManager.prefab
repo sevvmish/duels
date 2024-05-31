@@ -50,3 +50,4 @@ MonoBehaviour:
   npcDeathEffect: {fileID: 7874937668591792028, guid: c85d609d42759a44d935e8702bb888d9, type: 3}
   consumeGoldEffect: {fileID: 1491710503566559369, guid: 36d38a1ec67c18748933453ec6e7d9c8, type: 3}
   getNewPlayerEffect: {fileID: 8811936175236427540, guid: 12d3c63d6c96e894c9b6db0575737e07, type: 3}
+  healEffect: {fileID: 2157610138527215690, guid: b3c6a0f998064044c8ce0c75e92d5f86, type: 3}

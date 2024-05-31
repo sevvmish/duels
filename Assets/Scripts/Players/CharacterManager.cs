@@ -138,7 +138,11 @@ public class CharacterManager : MonoBehaviour, IPlayer
             }
                 
 
-            if (aimer.Aims.Count > 0)
+            if (Character.AttackType != AttackTypes.heal && aimer.Aims.Count > 0)
+            {
+                sendToAttack();
+            }
+            else if (Character.AttackType == AttackTypes.heal)
             {
                 sendToAttack();
             }
@@ -192,6 +196,13 @@ public class CharacterManager : MonoBehaviour, IPlayer
         }        
     }
 
+    public void ReceiveHeal(IPlayer damager)
+    {
+        if (!Character.IsAlive) return;
+
+        Character.ReceiveHeal(damager.Character.CurrentDamage);
+    }
+
 
     private void sendToAttack()
     {
@@ -201,6 +212,42 @@ public class CharacterManager : MonoBehaviour, IPlayer
 
         _updateSendToAttack = Globals.COOLDOWN_UPDATE_ATTACK_PLAYER;
 
+        if (Character.AttackType != AttackTypes.heal)
+        {
+            dealDamage();
+        }
+        else
+        {
+            heal();
+        }
+    }
+
+    private void heal()
+    {        
+        List<CharacterManager> chars = mainDomain.PlayerSquad;
+
+        CharacterManager wounded = default;
+        float leftHP = float.MaxValue;
+
+        for (int i = 0; i < chars.Count; i++)
+        {
+            if (chars[i].Character.CurrentHP < chars[i].Character.MaxHP && (chars[i].Character.MaxHP - chars[i].Character.CurrentHP) < leftHP)
+            {                
+                leftHP = chars[i].Character.MaxHP - chars[i].Character.CurrentHP;
+                wounded = chars[i];
+            }
+        }
+
+        
+
+        if (wounded != null)
+        {            
+            performAttack.Heal(wounded);
+        }
+    }
+
+    private void dealDamage()
+    {
         float minDist = float.MaxValue;
         IPlayer aim = null;
 
@@ -223,9 +270,9 @@ public class CharacterManager : MonoBehaviour, IPlayer
         if (aim != null)
         {
             float minusDist = Character.HitRadius + aim.Character.DamageRadius;
-            
+
             if (minDist <= minusDist)
-            {                
+            {
                 if (agent.hasPath && !agent.isStopped) agent.isStopped = true;
                 performAttack.Hit(aim);
             }

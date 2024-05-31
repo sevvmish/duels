@@ -173,6 +173,13 @@ public class NPCCharacter : MonoBehaviour, IPlayer
         }
     }
 
+    public void ReceiveHeal(IPlayer damager)
+    {
+        if (!Character.IsAlive) return;
+
+        Character.ReceiveHeal(damager.Character.CurrentDamage);
+    }
+
 
     private void sendToAttack()
     {

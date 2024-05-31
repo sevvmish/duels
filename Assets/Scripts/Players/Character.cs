@@ -51,15 +51,22 @@ public class Character
             case CharacterTypesByUniqueName.ShooterMike:
                 c = ShooterMike(level);
                 break;
-
             case CharacterTypesByUniqueName.TestBoss:
                 c = TestBoss(level);
+                break;
+            case CharacterTypesByUniqueName.VikingHero:
+                c = VikingHero(level);
+                break;
+
+            case CharacterTypesByUniqueName.PriestSimpleHuman:
+                c = PriestSimpleHuman(level);
                 break;
         }
               
         CharacterTypeByUniqueName = c.CharacterTypeByUniqueName;
         Name = c.Name;
         Level = level;
+        
         CharacterTypeByCathegory = c.CharacterTypeByCathegory;
        
         BaseHP = c.BaseHP;
@@ -91,7 +98,7 @@ public class Character
         c.BaseDamage = 10;
         c.DeltaDamage = 2;
 
-        c.Name = "WarriorSam";
+        c.Name = "Воин";
                         
         c.DamageRadius = 0.25f;
         c.HitRadius = 1.1f;
@@ -116,7 +123,7 @@ public class Character
         c.BaseDamage = 15;
         c.DeltaDamage = 3;
 
-        c.Name = "ShooterMike";
+        c.Name = "Лучник";
         
         c.DamageRadius = 0.25f;
         c.HitRadius = 4f;
@@ -125,6 +132,31 @@ public class Character
         c.AttackType = AttackTypes.ranged_hit;
         c.CharacterGameplayRole = CharacterGameplayRoles.rangedDamager;
         c.AttackSpeed = 0.8f;
+        c.Size = CharacterSized.small;
+        c.CurrentSpeed = 3;
+        c.CharacterTypeByCathegory = CharacterTypesByCathegory.Squad;
+        return c;
+    }
+
+    private Character PriestSimpleHuman(int level)
+    {
+        Character c = new Character();
+        c.CharacterTypeByUniqueName = CharacterTypesByUniqueName.PriestSimpleHuman;
+
+        c.BaseHP = 70;
+        c.DeltaHP = 5;
+        c.BaseDamage = 15;
+        c.DeltaDamage = 2;
+
+        c.Name = "Жрец";
+
+        c.DamageRadius = 0.25f;
+        c.HitRadius = 6f;
+        c.AggroRadius = 5f;
+        c.CharacterQuality = CharacterQualities.common;
+        c.AttackType = AttackTypes.heal;
+        c.CharacterGameplayRole = CharacterGameplayRoles.healer;
+        c.AttackSpeed = 1.5f;
         c.Size = CharacterSized.small;
         c.CurrentSpeed = 3;
         c.CharacterTypeByCathegory = CharacterTypesByCathegory.Squad;
@@ -156,6 +188,32 @@ public class Character
         return c;
     }
 
+    private Character VikingHero(int level)
+    {
+        Character c = new Character();
+        c.CharacterTypeByUniqueName = CharacterTypesByUniqueName.VikingHero;
+
+        c.BaseHP = 300;
+        c.DeltaHP = 20;
+        c.BaseDamage = 30;
+        c.DeltaDamage = 10;
+
+        c.Name = "Викинг";
+
+        c.DamageRadius = 0.35f;
+        c.HitRadius = 1.25f;
+        c.AggroRadius = 5f;
+        c.CharacterQuality = CharacterQualities.legendary;
+        c.AttackType = AttackTypes.melee_hit;
+        c.CharacterGameplayRole = CharacterGameplayRoles.meleeDamager;
+        c.AttackSpeed = 0.9f;
+        c.Size = CharacterSized.medium;
+        c.CurrentSpeed = 3;
+        c.CharacterTypeByCathegory = CharacterTypesByCathegory.SquadHero;
+        return c;
+    }
+
+
     //=========================Public=============================
 
 
@@ -169,6 +227,17 @@ public class Character
         {
             OnCharacterDead.Invoke();
             CurrentHP = 0;
+        }
+    }
+
+    public void ReceiveHeal(float heal)
+    {
+        if (!IsAlive) return;
+        CurrentHP += heal;
+
+        if (CurrentHP > MaxHP)
+        {
+            CurrentHP = MaxHP;
         }
     }
 
@@ -188,17 +257,6 @@ public class Character
         return "";
     }
 
-    public static GameObject GetCharacterObject(CharacterTypesByUniqueName _type)
-    {
-        switch (_type)
-        {
-            case CharacterTypesByUniqueName.WarriorSam: return Resources.Load<GameObject>("Characters/WarriorSam");
-            case CharacterTypesByUniqueName.ShooterMike: return Resources.Load<GameObject>("Characters/ShooterMike");
-            case CharacterTypesByUniqueName.TestBoss: return Resources.Load<GameObject>("Characters/TestBoss");
-        }
-
-        return null;
-    }
 }
 
 public enum CharacterTypesByUniqueName
@@ -207,7 +265,9 @@ public enum CharacterTypesByUniqueName
     ShooterMike,
     TestBoss,
     WarriorShieldSwordSimpleHuman,
-    WarriorShieldSwordImprovedHuman
+    WarriorShieldSwordImprovedHuman,
+    VikingHero,
+    PriestSimpleHuman
 }
 
 public enum CharacterTypesByCathegory
@@ -233,7 +293,8 @@ public enum AttackTypes
 {
     melee_hit,
     ranged_hit,
-    magic_hit
+    magic_hit,
+    heal
 }
 
 public enum CharacterSized

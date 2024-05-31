@@ -15,6 +15,7 @@ public class EffectsManager : MonoBehaviour
     [SerializeField] private GameObject npcDeathEffect;
     [SerializeField] private GameObject consumeGoldEffect;
     [SerializeField] private GameObject getNewPlayerEffect;
+    [SerializeField] private GameObject healEffect;
 
     public ObjectPool Grave01Pool => grave01Pool;
     private ObjectPool grave01Pool;
@@ -22,6 +23,9 @@ public class EffectsManager : MonoBehaviour
     private ObjectPool grave02Pool;
     public ObjectPool Grave03Pool => grave03Pool;
     private ObjectPool grave03Pool;
+
+    public ObjectPool HealEffectPool => healEffectPool;
+    private ObjectPool healEffectPool;
 
     public ObjectPool NpcDeathEffectPool => npcDeathEffectPool;
     private ObjectPool npcDeathEffectPool;
@@ -39,6 +43,7 @@ public class EffectsManager : MonoBehaviour
         grave01Pool = new ObjectPool(20, grave01, transform);
         grave02Pool = new ObjectPool(20, grave02, transform);
         grave03Pool = new ObjectPool(20, grave03Big, transform);
+        healEffectPool = new ObjectPool(20, healEffect, transform);
         npcDeathEffectPool = new ObjectPool(20, npcDeathEffect, transform);
         getNewPlayerEffectPool = new ObjectPool(10, getNewPlayerEffect, transform);
 

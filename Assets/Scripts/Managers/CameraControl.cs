@@ -28,7 +28,7 @@ public class CameraControl : MonoBehaviour
         }
         else
         {
-            mainCamera.fieldOfView = 70;
+            mainCamera.fieldOfView = 65;
         }
     }
 

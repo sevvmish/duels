@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
         {   
             chooseCharacter.ActivatePanel(true, new List<Character>() {new Character(CharacterTypesByUniqueName.WarriorSam, 1),
                                                                            new Character(CharacterTypesByUniqueName.ShooterMike, 1),
-                                                                           new Character(CharacterTypesByUniqueName.TestBoss, 1), }, heroChosen);
+                                                                           new Character(CharacterTypesByUniqueName.PriestSimpleHuman, 1), }, heroChosen);
         }
         else
         {
