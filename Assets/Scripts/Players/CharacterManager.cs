@@ -80,7 +80,7 @@ public class CharacterManager : MonoBehaviour, IPlayer
         g.transform.localEulerAngles = Vector3.zero;
         g.SetActive(true);
 
-        gameObject.AddComponent<PerformAttack>();
+        //gameObject.AddComponent<PerformAttack>();
         performAttack = GetComponent<PerformAttack>();
         performAttack.SetData(this, characterAnimator, RegisterEnemyKilled);
 

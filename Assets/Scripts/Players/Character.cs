@@ -145,8 +145,8 @@ public class Character
 
         c.BaseHP = 70;
         c.DeltaHP = 5;
-        c.BaseDamage = 15;
-        c.DeltaDamage = 2;
+        c.BaseDamage = 25;
+        c.DeltaDamage = 5;
 
         c.Name = "∆рец";
 

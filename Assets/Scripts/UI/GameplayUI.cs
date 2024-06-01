@@ -13,6 +13,7 @@ public class GameplayUI : MonoBehaviour
     [Inject] private MainPlayerControl mainPlayerControl;
 
     [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI bigTimerText;
     [SerializeField] private TextMeshProUGUI goldText;
 
     private float _timerForTimer = 1;
@@ -22,6 +23,7 @@ public class GameplayUI : MonoBehaviour
     void Start()
     {
         goldText.text = mainPlayerCoins.ToString("f0");
+        bigTimerText.text = "";
     }
 
     private void Update()
@@ -84,6 +86,11 @@ public class GameplayUI : MonoBehaviour
         else
         {
             timerText.color = Color.white;
+        }
+
+        if (newTime <= 10)
+        {
+            bigTimerText.text = result;
         }
     }
 

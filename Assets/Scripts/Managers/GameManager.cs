@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
             QualitySettings.shadowResolution = ShadowResolution.Medium;
         }
 
-        SecondsLeftToEndGame = 4 * 60;
+        SecondsLeftToEndGame = 4*60;
         levelManager.SetLevel();
     }
 
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         //timer
-        if (SecondsLeftToEndGame > 0) SecondsLeftToEndGame -= Time.deltaTime;
+        if (SecondsLeftToEndGame >= 0) SecondsLeftToEndGame -= Time.deltaTime;
 
         //first player for main player
         if (!isFirstPlayerChosen && IsGameStarted && !IsGameEnded && mainPlayerControl.MainDomain.PlayerSquadAmount > 0)

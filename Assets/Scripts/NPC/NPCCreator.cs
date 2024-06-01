@@ -143,6 +143,7 @@ public class NPCCreator : MonoBehaviour
         m.transform.localPosition = Vector3.zero;
         m.gameObject.name = c.Name;
         GameObject g = m.SetCharacter(c, team, c.CurrentSpeed, assets.GetCharacterObject(c.CharacterTypeByUniqueName), RemoveCharacter, null);
+        g.name = c.Name;
         m.IsReadyForAction = true;
 
         g.AddComponent<CharacterAimer>();
@@ -165,7 +166,20 @@ public class NPCCreator : MonoBehaviour
         yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION/2);
         effects.SetNPCDeathEffect(character.transform.position);
         effects.SpawnGoldCoinsReward(2, character.transform.position);
+
+        GameObject g = character.GetCharacterGameobject;
+        if (g.TryGetComponent(out CharacterAimer a))
+        {
+            Destroy(a);
+        }
+        if (g.TryGetComponent(out CapsuleCollider c))
+        {
+            Destroy(c);            
+        }
+        
+
         assets.ReturnCharacterObject(character.GetCharacterGameobject, character.Character.CharacterTypeByUniqueName);
+        
         assets.NpcCharacterPool.ReturnObject(character.gameObject);
     }
 

@@ -132,7 +132,17 @@ public class PlayerDomain : MonoBehaviour
         yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION/2f);
         effects.SetGrave(character.transform.position, character.Character.CharacterTypeByCathegory);
         yield return new WaitForSeconds(Globals.PLAYER_DEATH_WAIT_ANIMATION / 2f);
-        character.gameObject.SetActive(false);
+        
+        GameObject g = character.GetCharacterGameobject;
+        if (g.TryGetComponent(out CharacterAimer a))
+        {
+            Destroy(a);
+        }
+        if (g.TryGetComponent(out CapsuleCollider c))
+        {
+            Destroy(c);
+        }        
+
         assets.ReturnCharacterObject(character.GetCharacterGameobject, character.Character.CharacterTypeByUniqueName);
         assets.CharacterManagerPool.ReturnObject(character.gameObject);
     }

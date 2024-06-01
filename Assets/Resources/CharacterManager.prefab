@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1473152141739705082}
   - component: {fileID: 6088383314105203211}
   - component: {fileID: 939814628859299025}
+  - component: {fileID: 7714466481774343888}
   m_Layer: 3
   m_Name: CharacterManager
   m_TagString: Untagged
@@ -70,7 +71,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsReadyForAction: 0
-  PlayerAims: []
 --- !u!136 &6088383314105203211
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -121,3 +121,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7714466481774343888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8664223362862218502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66876136ca5f857479133d171d4bc046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
