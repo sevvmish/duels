@@ -124,7 +124,13 @@ public class PerformAttack : MonoBehaviour
         g.SetActive(true);
         yield return new WaitForSeconds(0.1f);
 
-        aim.ReceiveHit(myPlayer, registerKilling);
+        transform.LookAt(new Vector3(aim.PlayerTransform.position.x, transform.position.y, aim.PlayerTransform.position.z));
+        GameObject dd = assets.DamageDealerPool.GetObject();
+        dd.GetComponent<DamageDealer>().SetData(myPlayer, 1, registerKilling, 0.5f, true);
+        dd.transform.position = transform.position + transform.forward * (myPlayer.Character.HitRadius - 0.4f) + Vector3.up;
+        dd.SetActive(true);
+        //aim.ReceiveHit(myPlayer, registerKilling);
+
 
         yield return new WaitForSeconds(0.1f);
         myPlayer.SetBusy(false);
@@ -134,9 +140,7 @@ public class PerformAttack : MonoBehaviour
     }
 
     private IEnumerator bowHit(IPlayer aim)
-    {
-        float maxFlyTime = 0.2f;
-
+    {        
         transform.LookAt(new Vector3(aim.PlayerTransform.position.x, transform.position.y, aim.PlayerTransform.position.z));
         _animator.Hit();
         myPlayer.SetBusy(true);
@@ -147,10 +151,23 @@ public class PerformAttack : MonoBehaviour
         g.SetActive(true);
 
         GameObject arrow = assets.Arrow1Pool.GetObject();
+        arrow.GetComponent<DamageDealer>().SetData(myPlayer, 1, registerKilling, 0.3f, false);
         arrow.SetActive(true);
+                                        
         Vector3 myPoint = transform.position + Vector3.up * 0.8f + transform.forward * 0.3f;
         arrow.transform.position = myPoint;
-        
+
+        Vector3 aimPoint = aim.PlayerTransform.position + Vector3.up * 0.8f;
+
+        arrow.transform.LookAt(aimPoint);
+
+        Vector3 to = (aimPoint - myPoint).normalized * myPlayer.Character.HitRadius;
+        float flyTime = myPlayer.Character.HitRadius * 0.05f;
+
+
+        arrow.transform.DOMove(myPoint + to, flyTime).SetUpdate(UpdateType.Fixed).SetEase(Ease.Linear);
+
+        /*
         Vector3 upV = Vector3.up;
         switch(aim.Character.Size)
         {
@@ -167,20 +184,21 @@ public class PerformAttack : MonoBehaviour
                 break;
         }
 
-        Vector3 aimPoint = aim.PlayerTransform.position + upV;
-        arrow.transform.LookAt(aimPoint);
+        Vector3 aimPoint = (aim.PlayerTransform.position + Vector3.up * 0.8f - myPoint).normalized * 5;
+        arrow.transform.LookAt(aim.PlayerTransform.position);
         
         float distance = (aimPoint - transform.position).magnitude;
         float flyTime = distance / character.HitRadius * maxFlyTime;
-        flyTime = flyTime > maxFlyTime ? maxFlyTime : flyTime;
+        //flyTime = flyTime > maxFlyTime ? maxFlyTime : flyTime;
+        flyTime = 1;
 
-        aimPoint = Vector3.Lerp(myPoint, aimPoint, 0.9f);
-        arrow.transform.DOMove(aimPoint, flyTime).SetEase(Ease.Linear);
+        //aimPoint = Vector3.Lerp(myPoint, aimPoint, 0.9f);
+        arrow.transform.DOMove(arrow.transform.forward * 5f, flyTime).SetUpdate(UpdateType.Fixed).SetEase(Ease.Linear);*/
         myPlayer.SetBusy(false);
         yield return new WaitForSeconds(flyTime);        
 
         //if (character.CharacterTypeByUniqueName == CharacterTypesByUniqueName.ShooterMike) print("SHOOOOOOOOOOOTTTTTTT - " + _timer + "  -  " + _timer2);
-        aim.ReceiveHit(myPlayer, registerKilling);
+        //aim.ReceiveHit(myPlayer, registerKilling);
         assets.Arrow1Pool.ReturnObject(arrow);
 
         yield return new WaitForSeconds(0.2f);

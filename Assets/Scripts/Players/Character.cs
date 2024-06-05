@@ -126,7 +126,7 @@ public class Character
         c.Name = "Лучник";
         
         c.DamageRadius = 0.25f;
-        c.HitRadius = 4f;
+        c.HitRadius = 6f;
         c.AggroRadius = 5f;
         c.CharacterQuality = CharacterQualities.common;
         c.AttackType = AttackTypes.ranged_hit;

@@ -47,6 +47,7 @@ MonoBehaviour:
   characterManager: {fileID: 8664223362862218502, guid: 67ebeeb3abec6d54ea2d229e22bbd157, type: 3}
   npcCharacter: {fileID: 6281935715966961826, guid: ef9a05fab586ed04583e26c0e9622a5f, type: 3}
   goldCoin: {fileID: 8657753689586206769, guid: 13c024b092e2ddd4e9750179cd22af80, type: 3}
+  damageDealer: {fileID: 8959715260763361618, guid: 2200f5122ead9a245bef7e294b8943cb, type: 3}
   simpleWarriorWithShield: {fileID: 3509984709288418595, guid: d4903808f5d042f458228a803dddddf6, type: 3}
   simpleArcher: {fileID: 6522818690537447488, guid: 24d616663d251bc4f89383477dcec3ac, type: 3}
   simpleMageBold: {fileID: 2781809531250869418, guid: abb7c451ee12ded46b07e36fc7d4de85, type: 3}

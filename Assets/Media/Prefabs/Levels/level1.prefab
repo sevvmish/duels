@@ -14469,8 +14469,12 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1381680324836968062, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
-      propertyPath: currentNPCs.Array.data[1]
+      propertyPath: currentNPCs.Array.data[0]
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1381680324836968062, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
+      propertyPath: currentNPCs.Array.data[1]
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1381680324836968062, guid: b592ab2799bbb0048b97c8bde923b510, type: 3}
       propertyPath: currentNPCs.Array.data[2]

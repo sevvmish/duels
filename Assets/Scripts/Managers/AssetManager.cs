@@ -12,6 +12,7 @@ public class AssetManager : MonoBehaviour
     [SerializeField] private GameObject characterManager;
     [SerializeField] private GameObject npcCharacter;
     [SerializeField] private GameObject goldCoin;
+    [SerializeField] private GameObject damageDealer;
 
     [Header("Characters")]
     [SerializeField] private GameObject simpleWarriorWithShield;
@@ -51,6 +52,9 @@ public class AssetManager : MonoBehaviour
     public ObjectPool GoldCoinPool => goldCoinPool;
     private ObjectPool goldCoinPool;
 
+    public ObjectPool DamageDealerPool => damageDealerPool;
+    private ObjectPool damageDealerPool;
+
     public ObjectPool Arrow1Pool => arrow1Pool;
     private ObjectPool arrow1Pool;
 
@@ -71,6 +75,7 @@ public class AssetManager : MonoBehaviour
         characterManagerPool = new ObjectPool(50, characterManager, transform);
         npcCharacterPool = new ObjectPool(50, npcCharacter, transform);
         goldCoinPool = new ObjectPool(50, goldCoin, transform);
+        damageDealerPool = new ObjectPool(50, damageDealer, transform);
 
         arrow1Pool = new ObjectPool(20, arrow1, transform);
         meleeSoundsPool = new ObjectPool(20, meleeSwordSounds, transform);
