@@ -14,5 +14,7 @@ public class MainMenuInstaller : MonoInstaller
         Container.Bind<Musics>().FromComponentInHierarchy(true).AsSingle();
         Container.Bind<Sounds>().FromComponentInHierarchy(true).AsSingle();
         Container.Bind<ScreenSaver>().FromComponentInHierarchy(true).AsSingle();
+        Container.Bind<GoldCoinsUI>().FromComponentInHierarchy(true).AsSingle();
+        Container.Bind<PlayerRatingUI>().FromComponentInHierarchy(true).AsSingle();
     }
 }

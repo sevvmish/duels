@@ -12,10 +12,10 @@ public class PlayerData
     public int Mus;
 
     public bool IsLowFPS;
-
-    public int Level;
-
+    public int Rating;
     public bool AdvOff;
+
+    public int Gold;
 
 
     public PlayerData()
@@ -25,10 +25,10 @@ public class PlayerData
         S = 1; // sound on? 1 - true;        
         Mus = 1; // music
         
-        Level = 0;
+        Rating = 1;
+        Gold = 0;
 
-        IsLowFPS = false;
-        
+        IsLowFPS = false;        
         AdvOff = false;
 
         Debug.Log("created PlayerData instance");

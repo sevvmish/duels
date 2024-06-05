@@ -151,7 +151,7 @@ public class PerformAttack : MonoBehaviour
         g.SetActive(true);
 
         GameObject arrow = assets.Arrow1Pool.GetObject();
-        arrow.GetComponent<DamageDealer>().SetData(myPlayer, 1, registerKilling, 0.3f, false);
+        arrow.GetComponent<DamageDealer>().SetData(myPlayer, 1, registerKilling, 0.3f, false, true);
         arrow.SetActive(true);
                                         
         Vector3 myPoint = transform.position + Vector3.up * 0.8f + transform.forward * 0.3f;

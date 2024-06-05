@@ -13,7 +13,9 @@ public class DamageDealer : MonoBehaviour
     private Character myCharacter;
     private IPlayer myPlayer;
     private Action<Character> registerKilling;
+    
     private bool isReturn;
+    private bool isHide;
 
     private HashSet<IPlayer> victims = new HashSet<IPlayer>();
 
@@ -26,14 +28,26 @@ public class DamageDealer : MonoBehaviour
         mainCollider.isTrigger = true;
         assets = GameObject.Find("AssetManager").GetComponent<AssetManager>();
     }
-        
+
+    public void SetData(IPlayer myPl, int victimsAm, Action<Character> k, float radius)
+    {
+        SetData(myPl, victimsAm, k, radius, false, false);
+    }
+
     public void SetData(IPlayer myPl, int victimsAm, Action<Character> k, float radius, bool isReturnToPool)
+    {
+        SetData(myPl, victimsAm, k, radius, isReturnToPool, false);
+    }
+
+
+    public void SetData(IPlayer myPl, int victimsAm, Action<Character> k, float radius, bool isReturnToPool, bool isHideAfterHit)
     {
         victims.Clear();
         mainCollider.enabled = true;
 
 
         isReturn = isReturnToPool;
+        isHide = isHideAfterHit;
         mainCollider.radius = radius;
         myTeam = myPl.TeamID;        
         myPlayer = myPl;
@@ -56,7 +70,15 @@ public class DamageDealer : MonoBehaviour
                 }
                 else
                 {
-                    mainCollider.enabled = false;
+                    if (isHide)
+                    {
+                        gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        mainCollider.enabled = false;
+                    }
+                    
                 }
                 
             }

@@ -1,0 +1,14 @@
+{
+  "idSave": 3,
+  "isFirstSession": false,
+  "language": "ru",
+  "promptDone": false,
+  "money": 1,
+  "newPlayerName": "Hello!",
+  "openLevels": [
+    false,
+    true,
+    false
+  ],
+  "MainSave1": "{\"L\":\"en\",\"M\":0,\"S\":1,\"Mus\":1,\"IsLowFPS\":false,\"Rating\":1,\"AdvOff\":false,\"Gold\":0}"
+}

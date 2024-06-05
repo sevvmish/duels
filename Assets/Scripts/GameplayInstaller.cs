@@ -17,7 +17,7 @@ public class GameplayInstaller : MonoInstaller
             Globals.IsSoundOn = true;
             Globals.IsMusicOn = true;
             Globals.Language = Localization.GetInstanse("ru").GetCurrentTranslation();
-            Globals.CurrentLevel = Globals.MainPlayerData.Level;
+            Globals.CurrentLevel = Globals.MainPlayerData.Rating;
         }
         
 #endif    
