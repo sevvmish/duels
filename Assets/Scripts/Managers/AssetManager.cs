@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using UnityEngine;
 using Zenject;
 
@@ -19,6 +20,7 @@ public class AssetManager : MonoBehaviour
     [SerializeField] private GameObject simpleArcher;
     [SerializeField] private GameObject simpleMageBold;
     [SerializeField] private GameObject vikingHero;
+    [SerializeField] private GameObject wizardHero;
 
     [Header("Hits and weapons")]
     [SerializeField] private GameObject arrow1;
@@ -41,6 +43,7 @@ public class AssetManager : MonoBehaviour
     private ObjectPool ShooterMikePool;
     private ObjectPool TestBossPool;
     private ObjectPool VikingHeroPool;
+    private ObjectPool WizardHeroPool;
     private ObjectPool PriestSimplePool;
 
     public ObjectPool CharacterManagerPool => characterManagerPool;
@@ -90,6 +93,7 @@ public class AssetManager : MonoBehaviour
         TestBossPool = new ObjectPool(30, simpleMageBold, transform);
         VikingHeroPool = new ObjectPool(30, vikingHero, transform);
         PriestSimplePool = new ObjectPool(30, simpleMageBold, transform);
+        WizardHeroPool = new ObjectPool(30, wizardHero, transform);
     }
        
     public IEnumerator returnObjectToPool(ObjectPool pool, GameObject g, float _timer)
@@ -123,13 +127,33 @@ public class AssetManager : MonoBehaviour
 
     public GameObject GetCharacterObject(CharacterTypesByUniqueName _type)
     {
+        return GetCharacterObject(_type, 1);
+    }
+
+    public GameObject GetCharacterObject(CharacterTypesByUniqueName _type, int level)
+    {
+        GameObject g = default;
+
         switch (_type)
         {
             case CharacterTypesByUniqueName.WarriorSam: return WarriorSamPool.GetObject();
             case CharacterTypesByUniqueName.ShooterMike: return ShooterMikePool.GetObject();
             case CharacterTypesByUniqueName.TestBoss: return TestBossPool.GetObject();
-            case CharacterTypesByUniqueName.VikingHero: return VikingHeroPool.GetObject();
+            case CharacterTypesByUniqueName.VikingHero: 
+                g = VikingHeroPool.GetObject();
+                if (g.TryGetComponent(out CustomizeCharacter c))
+                {
+                    c.Customize(level);
+                }
+                return g;
             case CharacterTypesByUniqueName.PriestSimpleHuman: return PriestSimplePool.GetObject();
+            case CharacterTypesByUniqueName.WizardHero:
+                g = WizardHeroPool.GetObject();
+                if (g.TryGetComponent(out CustomizeCharacter c1))
+                {
+                    c1.Customize(level);
+                }
+                return g;
         }
 
         return null;
@@ -153,6 +177,10 @@ public class AssetManager : MonoBehaviour
 
             case CharacterTypesByUniqueName.VikingHero:
                 VikingHeroPool.ReturnObject(g);
+                break;
+
+            case CharacterTypesByUniqueName.WizardHero:
+                WizardHeroPool.ReturnObject(g);
                 break;
 
             case CharacterTypesByUniqueName.PriestSimpleHuman:

@@ -58,6 +58,10 @@ public class Character
                 c = VikingHero(level);
                 break;
 
+            case CharacterTypesByUniqueName.WizardHero:
+                c = WizardHero(level);
+                break;
+
             case CharacterTypesByUniqueName.PriestSimpleHuman:
                 c = PriestSimpleHuman(level);
                 break;
@@ -101,7 +105,7 @@ public class Character
         c.Name = "Воин";
                         
         c.DamageRadius = 0.25f;
-        c.HitRadius = 1.1f;
+        c.HitRadius = 1.3f;
         c.AggroRadius = 5f;
         c.CharacterQuality = CharacterQualities.common;
         c.AttackType = AttackTypes.melee_hit;
@@ -201,11 +205,36 @@ public class Character
         c.Name = "Викинг";
 
         c.DamageRadius = 0.35f;
-        c.HitRadius = 1.25f;
+        c.HitRadius = 1.8f;
         c.AggroRadius = 5f;
         c.CharacterQuality = CharacterQualities.legendary;
         c.AttackType = AttackTypes.melee_hit;
         c.CharacterGameplayRole = CharacterGameplayRoles.meleeDamager;
+        c.AttackSpeed = 0.9f;
+        c.Size = CharacterSized.medium;
+        c.CurrentSpeed = 3;
+        c.CharacterTypeByCathegory = CharacterTypesByCathegory.SquadHero;
+        return c;
+    }
+
+    private Character WizardHero(int level)
+    {
+        Character c = new Character();
+        c.CharacterTypeByUniqueName = CharacterTypesByUniqueName.WizardHero;
+
+        c.BaseHP = 300;
+        c.DeltaHP = 20;
+        c.BaseDamage = 30;
+        c.DeltaDamage = 10;
+
+        c.Name = "Волшебник";
+
+        c.DamageRadius = 0.35f;
+        c.HitRadius = 6f;
+        c.AggroRadius = 5f;
+        c.CharacterQuality = CharacterQualities.legendary;
+        c.AttackType = AttackTypes.ranged_hit;
+        c.CharacterGameplayRole = CharacterGameplayRoles.magicDamager;
         c.AttackSpeed = 0.9f;
         c.Size = CharacterSized.medium;
         c.CurrentSpeed = 3;
@@ -267,7 +296,8 @@ public enum CharacterTypesByUniqueName
     WarriorShieldSwordSimpleHuman,
     WarriorShieldSwordImprovedHuman,
     VikingHero,
-    PriestSimpleHuman
+    PriestSimpleHuman,
+    WizardHero
 }
 
 public enum CharacterTypesByCathegory
@@ -293,7 +323,6 @@ public enum AttackTypes
 {
     melee_hit,
     ranged_hit,
-    magic_hit,
     heal
 }
 
