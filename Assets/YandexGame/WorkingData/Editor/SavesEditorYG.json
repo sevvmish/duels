@@ -1,0 +1,14 @@
+{
+    "idSave": 2,
+    "isFirstSession": false,
+    "language": "ru",
+    "promptDone": false,
+    "money": 1,
+    "newPlayerName": "Hello!",
+    "openLevels": [
+        false,
+        true,
+        false
+    ],
+    "MainSave1": "{\"L\":\"\",\"M\":0,\"S\":1,\"Mus\":1,\"IsLowFPS\":false,\"AdvOff\":false,\"Seed\":157,\"TerrainSeed\":22,\"NatureSeed\":199,\"T\":50000.0,\"D\":0,\"Zoom\":55.5}"
+}
